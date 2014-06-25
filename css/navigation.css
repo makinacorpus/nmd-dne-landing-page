@@ -1,0 +1,130 @@
+/*
+Theme Name: GregLudo
+Author: GregLudo
+Author URI: http://www.greg-ludo.com
+Description: GregLudo
+*/
+
+@charset "utf-8";
+
+
+/* ---------- */
+/* NAVIGATION */
+/* ---------- */
+	
+.navigation {
+	background: transparent url(../images/landing/picto-pointe.png) no-repeat;
+	padding: 0px 0px 40px 0px;
+	height: 69px;
+	width: 100%;
+	margin-top:30px;
+}
+
+#cahier_charges .navigation {background-position: 3% 59px; }
+#propositions .navigation { margin-top:35px; background-position: 32% 59px; }
+#services .navigation { background-position: 61% 59px; }
+#territoire .navigation {
+	background-position:90% 59px;
+	position:relative;
+	z-index:1000;
+}
+		
+.navigation li {
+	text-align: center;
+	float: left;
+	width:25%;
+}
+		
+.navigation li a {
+	background: #ffffff;
+	border-bottom: 1px solid #41454d;
+	text-decoration: none;
+	display: block;
+	height: 38px;
+	width: 76%;
+	font-family: 'idealista_lightregular';
+	font-size:1.4em;
+	padding:10px 12%;
+	font-weight:normal;
+}
+		
+.navigation li.active a{
+	background:#0d70bc;
+	font-weight:bold;
+	color:#ffffff;
+	border-bottom: 1px solid #0d70bc;
+	font-family: 'idealistabold';
+}
+			
+.navigation li.active a:hover { cursor: help; }
+	
+.navigation li.un a { background-position: center -48px; }
+.navigation li.un.active a, 
+.navigation li.un a:hover { background-position: center 0px; }
+	
+.navigation li.deux a { background-position: center -144px; }
+.navigation li.deux.active a, 
+.navigation li.deux a:hover { background-position: center -96px; }
+	
+.navigation li.trois a { background-position: center -240px; }
+.navigation li.trois.active a, 
+.navigation li.trois a:hover { background-position: center -192px; }
+		
+.navigation li.quatre a { background-position: center -336px; }
+.navigation li.quatre.active a, 
+.navigation li.quatre a:hover { background-position: center -288px; }
+
+
+.navigation li.cinq a { background-position: center -432px; }
+.navigation li.cinq.active a, 
+.navigation li.cinq a:hover { background-position: center -384px; }
+
+
+
+
+/* ------------------------- */
+/* FOOTER NAV MULTI ONGLETS  */
+/* ------------------------- */
+
+.nav_footer_bloc {
+	width:100%;
+	height:39px;
+	position:relative;
+	margin-top:30px;
+}
+
+.nav_footer_bloc ul{
+	position:static;
+	top:0px;
+	left:0px;
+}
+
+.nav_footer_bloc ul li a{
+	width:29px;
+	height:29px;
+	display:block;
+	background: transparent url(../images/landing/picto-precedent.gif) no-repeat;
+	margin:0px 0px;
+	line-height:29px;
+	position:absolute;
+	top:0px;
+}
+
+.nav_footer_bloc ul li.prec a{
+	background: transparent url(../images/landing/picto-precedent.gif) no-repeat;
+	left:-10px;
+}
+	
+.nav_footer_bloc ul li.suiv a{
+	background: transparent url(../images/landing/picto-suivant.gif) no-repeat;
+	right:0px;
+}
+
+.nav_footer_bloc ul li a span{display:none;}
+
+.nav_footer_bloc ul li.active a,
+.nav_footer_bloc ul li.active a span{
+	background: transparent none;
+	width:29px;
+}
+

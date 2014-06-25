@@ -1,0 +1,42 @@
+/*
+Theme Name: GregLudo
+Author: GregLudo
+Author URI: http://www.greg-ludo.com
+Description: GregLudo
+*/
+
+@charset "utf-8";
+
+/* --------- */
+/* ELEMENT   */
+/* --------- */
+
+h1, h2, h3, h4, h5, h6 {
+	margin:0px;
+}
+
+p { margin: 10px 0px; }
+		
+ul, 
+ol { list-style: none; }
+
+address {
+	font-style: normal;
+	width: 100px;
+	float: left;
+}
+
+a {
+	font-weight: bold;
+	color: #40444d;}
+
+strong { font-weight: bold; }
+
+em { font-style: normal; }
+
+img { vertical-align: baseline; }
+
+h2{
+	font-family: 'idealista_lightregular';
+	font-size:1.9em;
+}

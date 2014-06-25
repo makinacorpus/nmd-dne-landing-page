@@ -1,0 +1,273 @@
+/*
+Theme Name: GregLudo
+Author: GregLudo
+Author URI: http://www.greg-ludo.com
+Description: GregLudo
+*/
+
+@charset "utf-8";
+
+
+
+.motif .inner{
+	padding: 15px 4.4% 25px 4.4%;
+}
+
+#cahier_charges.motif .inner{
+	padding: 15px 4.4% 15px 6.4%;
+}
+
+#cahier_charges .inner .colleft,
+#cahier_charges .inner .colright
+{
+	float:left;
+	margin: 0;
+	width:44%;
+}
+
+#cahier_charges .inner .colright{
+	margin-left:12%;
+}
+
+#cahier_charges .inner ul li{
+	list-style:disc;
+	color:#0d70bc;
+	padding-bottom:15px;
+}
+
+#cahier_charges .inner .colleft li strong{display:block;}
+
+#cahier_charges .inner ul li strong,
+#cahier_charges .inner ul li span{color:#404040;}
+
+.motif .inner h2{
+	padding: 10px 4.76%;
+	background:#FFFFFF;
+	font-family: 'idealista_lightregular';
+	color:#40444d;
+	margin:0 auto 30px auto;
+	line-height:125%;
+	
+}
+
+.motif .inner h2 strong{
+	font-family: 'idealistabold';
+	color:#0d70bc;
+	font-weight:bold;
+	text-transform:uppercase;
+}
+
+#propositions .inner #map{
+	width:109.52%;
+	margin-left:-4.76%;
+	height:450px;
+	background:#0d70bc;
+	margin-bottom:30px;
+}
+#propositions .inner .liste_offre ol{
+list-style:decimal outside none;
+
+font-size:1em;
+	z-index:1;
+		
+
+}
+	
+#propositions .inner .liste_offre ol li{
+position:relative;
+	color:#40444d;	
+background:#FFFFFF;
+padding:10px 2.3% 10px 7%;
+display:block;
+display:inline-block;
+margin:0;
+width:37%;
+margin-bottom:20px;
+font-family: Arial;
+}
+
+#propositions .inner .liste_offre ol li:nth-child(even){
+	margin-left:6%;
+}
+
+#propositions .inner .liste_offre ol li span.chiffre{
+	background:#0d70bc;
+	width:30px;
+	height:30px;
+	z-index:10;
+	text-align:center;
+	color:#FFFFFF;
+	line-height:30px;
+	display:block;
+	position:absolute;
+	top:10px;
+	left:2%;
+}
+
+#propositions .inner .liste_offre ol li span.chiffre:before{
+	width:0;
+	height:0;
+	
+}
+
+#propositions .inner #map .liste_offre ol li a{}
+#propositions .inner #map .liste_offre ol li strong{font-family: 'idealistabold';}
+
+#propositions .inner #map{}
+
+/* QUI_SOMMES_NOUS */
+
+#services .colleft, #services .colright {
+    float: left;
+    margin: 0;
+    width: 44%;
+}
+#services .colright {
+    margin-left: 12%;
+}
+
+#services .colleft ul li{list-style:disc inside;}
+#services .colleft ul {margin:15px 0px 0px 20px;}
+
+#qui_sommes_nous .colright a{color:#0d70bc;}
+/* TERRITOIRE */
+
+#attractivite h2 {
+    background: none repeat scroll 0 0 #ffffff;
+    font-size: 2em;
+    margin-bottom: 25px;
+    padding: 10px;
+}
+#attractivite h2 .idblbo {
+    text-transform: uppercase;
+}
+#attractivite .colright {
+    text-align: center;
+}
+#attractivite .colright img {
+    margin-bottom: 15px;
+}
+#attractivite .colright span {
+    font-size: 14px;
+}
+#attractivite .colright span.idblbo {
+    text-transform: uppercase;
+}
+
+.contenu_article ul {
+    margin: 15px 0;
+}
+.contenu_article ul li {
+    background: url("../images/landing/puce.gif") no-repeat scroll left 5px rgba(0, 0, 0, 0);
+    padding: 0 0 0 10px;
+}
+
+
+
+#attractivite .colleft,
+#attractivite .colright
+{
+	float:left;
+	margin: 0;
+	width:50%;
+}
+
+#attractivite  .colright{
+	margin-left:5%;
+	width:45%;
+}
+
+
+#attractivite .colright span {
+    font-size: 14px;
+}
+
+#attractivite .idgrlg {
+    color: #40444d;
+    font-family: 'idealista_lightregular',Arial;
+    font-weight: normal;
+}
+
+#attractivite .colright span.idblbo {
+    text-transform: uppercase;
+}
+#attractivite .colright span {
+    font-size: 14px;
+}
+#attractivite .idblbo {
+    color: #0d70bc;
+    font-family: 'idealistabold',Arial;
+    font-weight: bold;
+}
+
+.nav_footer{
+	background:#FFFFFF;
+	height:30px;
+}
+.nav_footer li:first-child{
+	display:block;
+	float:left;
+}
+.nav_footer li{
+	float:right;
+}
+
+.nav_footer li a{
+	background:#cfd0d2;
+	color:#FFFFFF;
+	text-transform:uppercase;
+	font-family: 'idealistabold';
+	padding: 0px 10px 0px 30px;
+	height:30px;
+	display:block;
+	line-height:30px;
+	position:relative;
+}
+
+.nav_footer li.active a{
+	background:#70737a;
+}
+
+.nav_footer li.active a{
+	color:#FFFFFF;
+	text-transform:uppercase;
+	font-family: 'idealistabold';
+	padding: 0px 10px 0px 30px;
+	height:30px;
+	display:block;
+	line-height:30px;
+	position:relative;
+}
+
+.nav_footer li.active a:before{
+	content:" ";
+	height:25px;
+	display:block;
+	width:23px;
+	position:absolute;
+	top:3px;
+	left:0px;
+	background: transparent url("../images/landing/sprite.png") no-repeat -62px -30px;
+}
+
+
+
+.nav_footer li a{
+	padding: 0px 30px 0px 10px;
+}
+
+.nav_footer li a:before{
+	content:" ";
+	height:25px;
+	display:block;
+	width:22px;
+	position:absolute;
+	top:4px;
+	left:auto;
+	right:0;
+	background: transparent url("../images/landing/sprite.png") no-repeat -60px -56px;
+}
+
+.onglet.active{display:block;}
+.onglet.inactive{display:none;}
+

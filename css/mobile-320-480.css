@@ -1,0 +1,253 @@
+/*
+Theme Name: GregLudo
+Author: GregLudo
+Author URI: http://www.greg-ludo.com
+Description: GregLudo
+*/
+
+@charset "utf-8";
+
+/* --------- */
+/* STRUCTURE */
+/* --------- */
+
+.mobile{display:block;}
+
+#page {
+	max-width: 480px;
+	width:100%;
+}
+
+#header {
+	width:91.3%;
+	background: transparent url(../images/landing/header.png) no-repeat right top;
+	position:absolute;
+	top:0px;
+	left:0%;
+	height:90px;
+	padding:10px 4.35% 75px 4.35%;
+}
+
+.image_header img{
+width:100%;
+height:auto;
+}
+
+#content {
+	padding: 0px 0px;
+	width:100%;	
+}
+
+#main{
+	padding: 100px 0% 30px 0%;
+}
+
+#leftbar{
+	display:none;
+}
+
+#rightbar{
+	position:static;
+}
+
+#bloc_contact {
+    background: url("../images/landing/bg-contact.gif") repeat-y scroll left top #0c70bc;
+    color: #40444d;
+    font-style: normal;
+    left: 50%;
+    margin: 0 auto 0 -90px;
+    padding: 45px 15px 0px 15px;
+    position: fixed;
+    text-align: center;
+    top: 20px;
+    width: 150px;
+	z-index:20000;
+}
+
+.bg_layer{
+	 background: url("../images/landing/alpha-50.png") repeat left top transparent;
+	 width:100%;
+	 height:100%;
+	 position:fixed;
+	 top:0;
+	 left:0;
+	 z-index:10000;
+	 
+}
+
+#bloc_contact .mobile{
+	display:block;
+	font-family: 'idealistabold';
+	font-size:1.3em;
+	color:#0c70bc;
+	background:#FFFFFF;
+	padding:5px 0px;
+	text-align:center;
+	margin:0 -15px;
+	cursor:pointer;
+}
+
+#bloc_contact img{
+}
+
+#footer {
+	background: white url(../images/landing/bg-footer.gif) no-repeat center top;
+	background-size:contain;
+	padding-top: 90px;
+	width:100%;
+	margin:0;
+	text-align: center;
+	font-size: 11px;
+	color: #a5a9ac;
+	height: 75px;
+	font-size:0.9em;
+}
+
+#footer a {
+    color: #A5A9AC;
+	font-weight:normal;
+}
+
+
+#services .colleft, 
+#services .colright,
+#cahier_charges .inner .colleft,
+#cahier_charges .inner .colright,
+#attractivite .colleft,
+#attractivite .colright {
+    float: none;
+    margin: 0;
+    width: 100%;
+}
+
+
+#propositions.motif .inner,
+#services.motif .inner,
+#territoire.motif .inner{
+    padding: 0px 4.4% 25px;
+}
+
+#propositions.motif .inner h2,
+#services.motif .inner h2,
+#territoire.motif .inner h2{
+	margin:0 0 25px -4.4%;
+	width:104.4%;
+}
+
+#attractivite .colright{
+	text-align:center;
+}
+
+#attractivite .colright .idgrlg{
+	display:block;
+}
+
+#propositions .inner .liste_offre ol li {
+    background: none repeat scroll 0 0 #ffffff;
+    color: #40444d;
+    display: inline-block;
+    font-family: Arial;
+    margin: 0 0 20px;
+    padding: 10px 2% 10px 15%;
+    width: 83%;
+}
+
+
+#propositions .inner .liste_offre ol li:nth-child(even) {
+    margin-left: 0%;
+}
+
+/******/
+/* NAVIAGATION */
+
+.navigation{
+    background: url("../images/landing/picto-pointe.png") no-repeat scroll 0 0 transparent;
+    height: 40px;
+    margin-top: 30px;
+    padding: 0 80px 0 0px;
+	width:auto;
+	position:relative;
+}
+
+.navigation li.active {
+    float: left;
+    text-align: center;
+    width: 100%;
+}
+
+.navigation li.active a {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+    font-size: 1.2em;
+    font-weight: normal;
+    height: 40px;
+    padding: 10px 30px;
+    text-decoration: none;
+    width: 100%;
+}
+
+
+
+
+
+#propositions li.un a,
+#services li.deux a,
+#territoire li.trois a{
+width:30px;
+height:40px;
+display:block;
+background: transparent url(../images/landing/picto-prev-mobile.gif) no-repeat center center;
+position:absolute;
+top:0px;
+left:0px;
+padding:0;
+margin:0;
+line-height:500px;
+overflow:hidden;
+border:0;
+}
+
+#cahier_charges li.deux a,
+#propositions li.trois a,
+#services li.quatre a{
+width:30px;
+height:40px;
+display:block;
+background: transparent url(../images/landing/picto-suiv-mobile.gif) no-repeat center center;
+position:absolute;
+top:0px;
+right:80px;
+padding:0;
+margin:0;
+line-height:500px;
+overflow:hidden;
+border:0;
+}
+
+#cahier_charges li.trois,
+#cahier_charges li.quatre,
+#propositions li.quatre,
+#services li.un,
+#territoire li.un,
+#territoire li.deux{display:none;}
+
+
+.navigation li.telecharger_pdf a,
+.navigation li.demande_contact a {
+    background: none repeat scroll 0 0 #ffffff;
+    border-bottom: 0px solid #41454d;
+    display: block;
+    height: 40px;
+    padding: 0px 0%;
+    text-decoration: none;
+    width: 40px;
+	position:absolute;
+	top:0px;
+	right:0px;
+}
+
+.navigation li.telecharger_pdf a{
+
+	right:40px;
+}

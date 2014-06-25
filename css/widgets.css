@@ -1,0 +1,121 @@
+
+@charset "utf-8";
+.addthis {
+    background: none repeat scroll 0 0 #eae6da;
+    color: #40444d;
+    font-size: 11px;
+    height: 20px;
+    margin: 0 18%;
+    padding: 20px 0;
+    text-align: right;
+    width: 64%;
+}
+.addthis li {
+    display: inline-block;
+    float: right;
+}
+
+#bloc_contact {
+    background: url("../images/landing/bg-contact.gif") repeat-y scroll left top transparent;
+    color: #40444d;
+    font-style: normal;
+    margin: 0;
+    padding: 45px 15px 15px 15px;
+    position: relative;
+    text-align: center;
+}
+#bloc_contact h4{
+	font-size:1.3em;
+	color:#FFFFFF;
+	font-family: 'idealistabold';
+	padding-bottom:15px;
+	position:absolute;
+	top:15px;
+	left:0;
+	text-align:center;
+	width:100%;
+	text-transform:uppercase;
+}
+#bloc_contact address {
+    color: #ffffff;
+    float: left;
+    font-size: 16px;
+    line-height: 110%;
+    margin-top: 15px;
+	margin-bottom: 15px;	
+    text-align: center;
+    width: 100%;
+}
+#bloc_contact address em {
+	color: #40444d;
+    display: block;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 90%;
+	padding:5px 0px;
+}
+#bloc_contact address span {
+    font-size: 12px;
+}
+#bloc_contact ul {
+    height: 30px;
+    margin: 15px auto;
+    width: 70px;
+}
+#bloc_contact ul li {
+    display: block;
+    float: left;
+    height: 30px;
+    margin-left: 5px;
+    width: 30px;
+}
+#bloc_contact ul li a {
+    background: url("../images/landing/sprite.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 30px;
+    width: 30px;
+}
+
+#bloc_contact ul li a.twitter {
+    background-position: 0 -90px;
+}
+
+#bloc_contact ul li a.viadeo {
+    background-position: -30px -90px;
+}
+
+#bloc_contact a{
+	-webkit-box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.5);
+	-moz-box-shadow:    2px 2px 3px 0px rgba(50, 50, 50, 0.5);
+	box-shadow:         2px 2px 3px 0px rgba(50, 50, 50, 0.5);
+}
+#bloc_contact ul li a{
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+#leftbar h4{
+	font-size:1.4em;
+	line-height:115%;
+	margin-bottom:15px;
+}
+
+#leftbar h4 a{
+	font-family: 'idealista_lightregular';
+	color:#FFFFFF;
+}
+
+#leftbar h4 a em{
+	font-family: 'idealistabold';
+	font-style:normal;
+	color:#FFFFFF;
+}
+
+#leftbar h4 a strong{
+	font-family: 'idealistabold';
+	color:#0d71bc;
+	text-transform:uppercase;
+	display:block;
+}

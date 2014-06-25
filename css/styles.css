@@ -1,0 +1,83 @@
+/*
+Theme Name: GregLudo
+Author: GregLudo
+Author URI: http://www.greg-ludo.com
+Description: GregLudo
+*/
+
+@charset "utf-8";
+
+@import url(elements.css);
+@import url(forms.css);
+@import url(structure.css);
+@import url(widgets.css);
+@import url(navigation.css);
+@import url(publication.css);
+@import url(nyroModal.css);
+@import url(jquery-ui-1.7.3.custom.css);
+
+/* ----------- */
+/* GENERALITES */
+/* ----------- */
+
+* {
+	text-decoration: none;
+	padding: 0px;
+	outline: 0px;
+	border: 0px;
+	margin: 0px;
+}
+
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	background: #eae6da;
+	overflow-x: hidden;
+	line-height: 125%;
+	font-size: 12px;
+	color: #40444d;
+}
+
+img {
+    vertical-align: bottom;
+    border: 0px;
+}
+
+.clear {
+	visibility: hidden;
+	padding: 0px;
+	border: 0px;
+	margin: 0px;
+	float: none;
+	clear: both;
+	height: 0px;
+	width: 0px;
+}
+
+@font-face {
+    font-family: 'idealistabold';
+    src: url('../font/idealista_bold-webfont.eot');
+    src: url('../font/idealista_bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/idealista_bold-webfont.woff') format('woff'),
+         url('../font/idealista_bold-webfont.ttf') format('truetype'),
+         url('../font/idealista_bold-webfont.svg#idealistabold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'idealista_lightregular';
+    src: url('../font/idealista_light-webfont.eot');
+    src: url('../font/idealista_light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/idealista_light-webfont.woff') format('woff'),
+         url('../font/idealista_light-webfont.ttf') format('truetype'),
+         url('../font/idealista_light-webfont.svg#idealista_lightregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.motif {
+    background: url("../images/landing/bg-motif.gif") repeat scroll left top #FFFFFF;
+}

@@ -1,0 +1,167 @@
+/*
+Theme Name: GregLudo
+Author: GregLudo
+Author URI: http://www.greg-ludo.com
+Description: GregLudo
+*/
+
+@charset "utf-8";
+
+/* --------- */
+/* STRUCTURE */
+/* --------- */
+
+#page {
+	position: relative;
+	margin: 0px auto;
+	max-width: 690px;
+	width:100%;
+}
+
+#header {
+	width:82.6%;
+	background: transparent url(../images/landing/header.png) no-repeat right top;
+	position:absolute;
+	top:30px;
+	left:4.35%;
+	height:80px;
+	padding:20px 4.35% 75px 4.35%;
+}
+
+.image_header img{
+width:100%;
+height:auto;
+}
+
+#wrapper{
+width:100%;
+
+}
+
+#content {
+	float: left;
+	padding: 0px 0px;
+	width:100%;	
+}
+
+#main{
+	background: #FFFFFF;
+	padding: 130px 30px 30px 30px;
+	position:relative;
+	padding: 130px 4.3% 30px 4.3%;
+}
+
+#leftbar{
+	position: static;
+	left: 0px;
+	top: 0;
+	width: 41%;
+	text-align:center;
+	padding-top:0;
+	margin-top:0;
+	float:left;
+	background: #40444d url(../images/landing/bg-telechargement.gif) repeat-y right top;
+}
+
+#leftbar .inner{
+	width: 80%;
+	background: transparent none;
+	padding:30px 10%;
+	min-height:115px;
+}
+
+#leftbar h4 {
+	width:60%;
+	float:left;
+}
+
+#leftbar h4 a strong{
+font-size:1.7em;
+padding-top:5px;
+display:block;
+}
+
+a.telecharger_pdf_image {
+	width:40%;
+	float:left;
+}
+a.telecharger_pdf_image img{
+	width:100%;
+}
+	
+#rightbar{
+	width:59%;
+	padding-top:0;
+	position:static;
+	top:0px;
+	right:0px;
+	float:left;
+}
+
+#bloc_contact {
+    background: #0f71ba url("../images/landing/bg-contact.gif") repeat-y scroll left top;
+    color: #40444d;
+    font-style: normal;
+    margin: 0;
+    padding: 25px 5%;
+    position: relative;
+    text-align: center;
+	min-height:125px;
+}
+
+
+#bloc_contact img{
+	float:left;
+	margin-right:5%;
+}
+
+#bloc_contact a img{
+	float:left;
+	margin-right:0%;
+	padding:0;
+}
+
+#bloc_contact h4,
+#bloc_contact address,
+#bloc_contact a{
+	float:left;
+	position:static;
+	width:auto;
+	text-align:left;
+	padding:0;
+	margin:0;
+}
+
+#bloc_contact h4,
+#bloc_contact address{
+	padding:0 0 5px 0;
+}
+
+#bloc_contact ul {
+    height: auto;
+    margin: 0 0 0 10%;
+    width: auto;
+}
+
+#bloc_contact a{
+    margin: 0 3% 0 0 ;
+}
+
+
+
+#footer {
+	background: white url(../images/landing/bg-footer.gif) no-repeat center top;
+	padding-top: 175px;
+	width:690px;
+	margin:0;
+	text-align: center;
+	font-size: 11px;
+	color: #a5a9ac;
+	height: 35px;
+	font-size:11px;
+}
+
+#footer a {
+    color: #A5A9AC;
+	font-weight:normal;
+}
