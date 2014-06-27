@@ -32,7 +32,8 @@
 			<div id="content">
 				<div id="main">
 					<div id="header">
-						<h1>{{dossier.account.name}}</h1>
+						<h1 ng-show="!loaded">Chargement de votre dossier en cours ...</h1>
+						<h1 ng-show="loaded">{{dossier.account.name}}</h1>
 						<h2>votre dossier immobilier d’entreprise</h2>					
 					</div>
 					<div class="image_header"><img src="images/landing/votre-dossier-immobilier-d-entreprise.jpg" alt="votre dossier immobilier d’entreprise" /></div>
@@ -42,7 +43,7 @@
 							<li class="deux"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
 							<li class="trois"><a href="#services" title="Les services de l'agence"><span>Les services de l'agence</span></a></li>
 							<li class="quatre"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
-							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" href="###" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
+							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" ng-href="{{pdfURL}}" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
 							<li class="mobile demande_contact"><a href="mailto:cduveau@nantes-developpement.com?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mobile.gif"></a></li>
 						</ul>
 						<div class="inner">						
@@ -64,23 +65,20 @@
 							<li class="deux active"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
 							<li class="trois"><a href="#services" title="Les services de l'agence"><span>Les services de l'agence</span></a></li>
 							<li class="quatre"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
-							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" href="###" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
+							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" ng-href="{{pdfURL}}" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
 							<li class="mobile demande_contact"><a href="mailto:cduveau@nantes-developpement.com?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mobile.gif"></a></li>						
 						</ul>
 						<div class="inner">
-							<h2><strong>7 offres de biens</strong> sélectionnées pour vous</h2>
+							<h2><strong>{{offres.length}} offres de biens</strong> sélectionnées pour vous</h2>
 							<div id="map">
+								<iframe ng-src="{{mapURL}}" width="100%" height="450"></iframe>
 							<!-- IFRAME MAP -->
 							</div>
 							<div class="liste_offre">
 								<ol>
-									<li><strong>Lorem ipsum dolor sit amet sectetur.</strong> Praesent eget porta arcused faucibus.</li>
-									<li><strong>Lorem ipsum dolor sit amet sectetur.</strong> Praesent eget porta arcused faucibus.</li>
-									<li><strong>Lorem ipsum dolor sit amet sectetur.</strong> Praesent eget porta arcused faucibus.</li>
-									<li><strong>Lorem ipsum dolor sit amet sectetur.</strong> Praesent eget porta arcused faucibus.</li>
-									<li><strong>Lorem ipsum dolor sit amet sectetur.</strong> Praesent eget porta arcused faucibus.</li>
-									<li><strong>Lorem ipsum dolor sit amet sectetur.</strong> Praesent eget porta arcused faucibus.</li>
-									<li><strong>Lorem ipsum dolor sit amet sectetur.</strong> Praesent eget porta arcused faucibus.</li>
+									<li ng-repeat="offre in offres">
+										<span class="chiffre">{{$index}}</span>
+										<strong>{{offre.label}}</strong>&nbsp;</li>
 								</ol>
 							</div>
 						</div>
@@ -91,7 +89,7 @@
 							<li class="deux"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
 							<li class="trois active"><a href="#services" title="Les services de l'agence"><span>Les services de l'agence</span></a></li>
 							<li class="quatre"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
-							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" href="###" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
+							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" ng-href="{{pdfURL}}" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
 							<li class="mobile demande_contact"><a href="mailto:cduveau@nantes-developpement.com?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mobile.gif"></a></li>
 						</ul>
 						<div class="inner">
@@ -148,7 +146,7 @@
 							<li class="deux"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
 							<li class="trois"><a href="#services" title="Les services de l'agence"><span>Les services de l'agence</span></a></li>
 							<li class="quatre active"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
-							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" href="###" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
+							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" ng-href="{{pdfURL}}" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
 							<li class="mobile demande_contact"><a href="mailto:cduveau@nantes-developpement.com?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mobile.gif"></a></li>						
 						</ul>
 						<div class="inner">
@@ -180,7 +178,7 @@
 						</div>
 						<ul class="nav_footer">						
 							<li class="active"><a href="#attractivite">Nantes</a></li>
-							<li><a href="###" >Téléchargement</a></li>
+							<li><a ng-href="{{pdfURL}}" >Téléchargement</a></li>
 						</ul>
 						<hr class="clear" />
 					</div>					
@@ -188,8 +186,8 @@
 			</div>
 			<div id="leftbar">
 				<div class="inner">
-					<h4><a title="" href="###" class="telecharger_pdf" onclick="window.open(this.href); return false;"><em>Télécharger</em> le détails de vos offres</a></h4>
-					<a title="" href="###" class="telecharger_pdf_image" onclick="window.open(this.href); return false;">
+					<h4><a title="" ng-href="{{pdfURL}}" class="telecharger_pdf" onclick="window.open(this.href); return false;"><em>Télécharger</em> le détails de vos offres</a></h4>
+					<a title="" ng-href="{{pdfURL}}" class="telecharger_pdf_image" onclick="window.open(this.href); return false;">
 						<img src="images/landing/telechargement-pdf.png" alt="Télécharger votre dossier au format PDF" />
 					</a>
 					<hr class="clear" />
