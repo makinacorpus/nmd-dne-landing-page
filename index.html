@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="dne">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Nantes m&eacute;tropole | Votre dossier immobilier d'entreprise</title>	
@@ -18,7 +18,7 @@
 		<script type="text/javascript" src="js/main.js"></script>
 		
 	</head>	
-<body>
+<body ng-controller="DNEController">
 	<div id="page">
 		<ul id="addthis_header" class="addthis">
 			<li class="addthis_toolbox addthis_default_style">
@@ -32,7 +32,7 @@
 			<div id="content">
 				<div id="main">
 					<div id="header">
-						<h1>Nom d'entreprise</h1>
+						<h1>{{dossier.account.name}}</h1>
 						<h2>votre dossier immobilier d’entreprise</h2>					
 					</div>
 					<div class="image_header"><img src="images/landing/votre-dossier-immobilier-d-entreprise.jpg" alt="votre dossier immobilier d’entreprise" /></div>
@@ -47,17 +47,14 @@
 						</ul>
 						<div class="inner">						
 							<ul class="colleft">
-								<li><strong>Type de local : </strong><span>Lorem ipsum dolor sit amet donec augue.</span></li>
-								<li><strong>Type d’occupation : </strong><span>Pharetra ac libero tempor, adipiscing dictum orci. Donec ultricies.</span></li>
-								<li><strong>Echéance : </strong><span>Pharetra ac libero tempor, adipiscing dictum orci. Donec ultricies.</span></li>
+								<li><strong>Type de local : </strong><span>{{dossier.type}}</span></li>
+								<li><strong>Type d’occupation : </strong><span ng-repeat="value in getSugarCRMValueList(dossier.type_local)">{{value}}{{$last ? '' : ', '}}</span></li>
+								<li><strong>Echéance : </strong><span>{{getDate(dossier.echeance_reponse_c) | date : 'dd/MM/yyyy'}}</span></li>
 								
 							</ul>
-							<ul class="colright">
-								<li><strong>Superficie : </strong><span>Consectetur adipiscing elit.</span></li>
-								<li><strong>Echéance : </strong><span>cursus. Praesent rhoncus.</span></li>
-								<li><strong>Effectif à terme : </strong><span>Estibulum nisl.</span></li>
-								
-							</ul>
+							<div class="colright">
+								<p>{{dossier.description}}</p>
+							</div>
 							<hr class="clear" />
 						</div>					
 					</div>
@@ -201,14 +198,14 @@
 			<div id="rightbar">
 				<div class="mobile bg_layer"></div>
 				<div id="bloc_contact">
-					<img src="images/landing/claire-duveau.jpg" alt="Claire DUVEAU" />
+					<img style="max-width:100%" ng-src="images/landing/{{dossier.assigned_user.id}}.jpg" alt="Claire DUVEAU" />
 					<h4>Votre contact</h4>
-					<address>Claire <strong>DUVEAU</strong><br>
-						<em>Chargée de mission</em>
-						<span><strong>Tél.</strong> : 02 40 35 28 88</span>
+					<address>{{dossier.assigned_user.first_name}} <strong>{{dossier.assigned_user.last_name}}</strong><br>
+						<em>{{dossier.assigned_user.title}}</em>
+						<span><strong>Tél.</strong> : {{dossier.assigned_user.phone_work}}</span>
 						<br>
 					</address>
-					<a href="mailto:cduveau@nantes-developpement.com?subject=RE%20:%20Demande%20d'informations ">
+					<a ng-href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations ">
 						<img alt="Me contacter" src="images/landing/me-contacter.gif">
 					</a>
 					<ul>
@@ -248,6 +245,8 @@
 	  })();
 
 	</script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+	<script type="text/javascript" src="js/dne.js"></script>
 </body>
 
 </html>
