@@ -207,8 +207,9 @@
 						<img alt="Me contacter" src="images/landing/me-contacter.gif">
 					</a>
 					<ul>
-						<li><a class="twitter" title="Twitter" href="https://twitter.com/nantesdev"></a></li>
-						<li><a class="viadeo" title="Viadeo" href="http://www.viadeo.com/fr/profile/claire.duveau"></a></li>
+						<li ng-repeat="network in socialnetworks[dossier.assigned_user.id]">
+							<a class="{{network.id}}" title="{{network.title}}" href="{{network.url}}"></a>
+						</li>
 					</ul>
 					<hr class="clear">
 					<span class="mobile">Masquer</span>
