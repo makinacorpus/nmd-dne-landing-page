@@ -20,56 +20,72 @@
 	</head>	
 <body ng-controller="DNEController">
 	<div id="page">
-		<ul id="addthis_header" class="addthis">
-			<li class="addthis_toolbox addthis_default_style">
-				<a class="addthis_button_print"></a>
-				<a class="addthis_button_email"></a>
-			</li>
-			<li>Sauvegarder :&nbsp;</li>
-		</ul>
-		<hr class="clear" />
 		<div id="wrapper">
 			<div id="content">
 				<div id="main">
 					<div id="header">
 						<h1 ng-show="!loaded">Chargement de votre dossier en cours ...</h1>
 						<h1 ng-show="loaded">{{dossier.account.name}}</h1>
-						<h2>votre dossier immobilier d’entreprise</h2>					
+						<h2>votre dossier immobilier d’entreprise</h2>				
 					</div>
 					<div class="image_header"><img src="images/landing/votre-dossier-immobilier-d-entreprise.jpg" alt="votre dossier immobilier d’entreprise" /></div>
+					<div id="pdf_contact_header" class="mobile">
+						<div id="bloc_pdf_header">
+							<h4><a title="Télécharger le détail de vos offres" ng-href="{{pdfURL}}" class="telecharger_pdf" onclick="window.open(this.href); return false;"><em>Télécharger</em> le détail de vos offres</a></h4>
+							<a title="Télécharger le détail de vos offres" ng-href="{{pdfURL}}" class="telecharger_pdf_image" onclick="window.open(this.href); return false;">
+								<img src="images/landing/telechargement-pdf.png" alt="Télécharger votre dossier au format PDF" />
+							</a>
+							<hr class="clear" />
+						</div>
+						<div id="bloc_contact_header">
+							<img ng-src="images/landing/{{dossier.assigned_user.id}}.jpg" alt="{{dossier.assigned_user.first_name}} {{dossier.assigned_user.last_name}}" />
+							<h4>Votre contact</h4>
+							<address>{{dossier.assigned_user.first_name}} <strong>{{dossier.assigned_user.last_name}}</strong><br>
+								<em>{{dossier.assigned_user.title}}</em>
+								<span><strong>Tél.</strong> : {{dossier.assigned_user.phone_work}}</span>
+								<br>
+							</address>
+							<a ng-href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations ">
+								<img alt="Me contacter" src="images/landing/me-contacter.gif">
+							</a>
+							<hr class="clear">
+						</div>
+						<hr class="clear" />
+					</div>
 					<div id="cahier_charges" class="motif">
 						<ul class="navigation">
 							<li class="un active"><a href="#cahier_charges" title="Votre cahier des charges"><span>Votre cahier des charges</span></a></li>
 							<li class="deux"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
-							<li class="trois"><a href="#services" title="Les services de l'agence"><span>Les services de l'agence</span></a></li>
+							<li class="trois"><a href="#services" title="Nos services"><span>Nos services</span></a></li>
 							<li class="quatre"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
-							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" ng-href="{{pdfURL}}" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
-							<li class="mobile demande_contact"><a href="mailto:cduveau@nantes-developpement.com?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mobile.gif"></a></li>
+							<li class="mobile demande_contact"><a ng-href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mel-mobile.gif"></a></li>
+							<li class="mobile telephone demande_contact"><a href="tel:{{dossier.assigned_user.phone_work}}"  title="Contactez nous par téléphone"><img alt="Contactez nous par téléphone" src="images/landing/ico-contact-tel-mobile.gif"></a></li>
 						</ul>
 						<div class="inner">						
 							<ul class="colleft">
 								<li><strong>Type de local : </strong><span>{{dossier.type}}</span></li>
-								<li><strong>Type d’occupation : </strong><span ng-repeat="value in getSugarCRMValueList(dossier.type_local)">{{value}}{{$last ? '' : ', '}}</span></li>
-								<li><strong>Echéance : </strong><span>{{getDate(dossier.echeance_reponse_c) | date : 'dd/MM/yyyy'}}</span></li>
-								
+								<li><strong>Type d’occupation : </strong><span ng-repeat="value in getSugarCRMValueList(dossier.type_local)">{{value}}{{$last ? '' : ', '}}</span></li>			
 							</ul>
-							<div class="colright">
-								<p>{{dossier.description}}</p>
-							</div>
+							<ul class="colright">
+								<li><strong>Echéance : </strong><span>{{getDate(dossier.echeance_reponse_c) | date : 'dd/MM/yyyy'}}</span></li>
+							</ul>
 							<hr class="clear" />
+							<ul>
+								<li><strong>Informations complémentaires : </strong><br /><span>{{dossier.description}}</span></li>
+							</ul>
 						</div>					
 					</div>
 					<div id="propositions" class="motif">
 						<ul class="navigation">
 							<li class="un"><a href="#cahier_charges" title="Votre cahier des charges"><span>Votre cahier des charges</span></a></li>
 							<li class="deux active"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
-							<li class="trois"><a href="#services" title="Les services de l'agence"><span>Les services de l'agence</span></a></li>
+							<li class="trois"><a href="#services" title="Nos services"><span>Nos services</span></a></li>
 							<li class="quatre"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
-							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" ng-href="{{pdfURL}}" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
-							<li class="mobile demande_contact"><a href="mailto:cduveau@nantes-developpement.com?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mobile.gif"></a></li>						
+							<li class="mobile demande_contact"><a ng-href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mel-mobile.gif"></a></li>
+							<li class="mobile telephone demande_contact"><a href="tel:{{dossier.assigned_user.phone_work}}"  title="Contactez nous par téléphone"><img alt="Contactez nous par téléphone" src="images/landing/ico-contact-tel-mobile.gif"></a></li>
 						</ul>
 						<div class="inner">
-							<h2><strong>{{offres.length}} offres de biens</strong> sélectionnées pour vous</h2>
+							<h2><strong>{{offres.length}} offres immobilières</strong> sélectionnées pour votre entreprise </h2>
 							<div id="map">
 								<iframe ng-src="{{mapURL}}" width="100%" height="450"></iframe>
 							<!-- IFRAME MAP -->
@@ -87,55 +103,91 @@
 						<ul class="navigation">
 							<li class="un"><a href="#cahier_charges" title="Votre cahier des charges"><span>Votre cahier des charges</span></a></li>
 							<li class="deux"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
-							<li class="trois active"><a href="#services" title="Les services de l'agence"><span>Les services de l'agence</span></a></li>
+							<li class="trois active"><a href="#services" title="Nos services"><span>Nos services</span></a></li>
 							<li class="quatre"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
-							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" ng-href="{{pdfURL}}" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
-							<li class="mobile demande_contact"><a href="mailto:cduveau@nantes-developpement.com?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mobile.gif"></a></li>
+							<li class="mobile demande_contact"><a ng-href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mel-mobile.gif"></a></li>
+							<li class="mobile telephone demande_contact"><a href="tel:{{dossier.assigned_user.phone_work}}"  title="Contactez nous par téléphone"><img alt="Contactez nous par téléphone" src="images/landing/ico-contact-tel-mobile.gif"></a></li>
 						</ul>
 						<div class="inner">
-							<div id="qui_sommes_nous" class="active onglet">
+							<div id="qui_sommes_nous" class="inactive onglet">
 								<h2>A Nantes, placez vos projets d’entreprise <strong>sous une bonne étoile</strong></h2>
+								<div class="colright">
+									<h3>NMD en chiffres-clés depuis 1998</h3>
+									<ul>
+										<li><strong>1 023</strong> entreprises accompagnées dans leur installation et leur développement</li>
+										<li><strong>22 264</strong> emplois générés sur le territoire avec la contribution de l’agence</li>
+										<li><strong>20 000</strong> mètres carrés de bureaux commercialisés chaque année avec le concours de l’agence</li>
+									</ul>
+								</div>
 								<div class="colleft">
-									<strong>Créée en 1998 par la communauté urbaine de Nantes, l’agence de développement économique Nantes Métropole Développement accompagne les entreprises dans leur implantation sur le territoire.</strong><br />
+									<strong>Créée par la communauté urbaine de Nantes, l’agence de développement économique Nantes Métropole Développement accompagne les entreprises dans leur implantation  sur le territoire.</strong><br />
+									<br />
 									<br />
 									<strong>Elle a pour principales missions :</strong>
 									<ul>
 										<li>L’accompagnement des entreprises</li>
-										<li>La promotion du territoire</li>
-										<li>L’animation des acteurs économiques</li>
+										<li>Le marketing territorial</li>
+										<li>L’animation économique</li>
 									</ul>
-								</div>
-								<div class="colright">
-									<p>L’agence compte 18 collaborateurs. Elle est présidée par Charles Gautier, Vice-Président au développement économique de Nantes Métropole et dirigée par Patrick Robert.</p>
-									<p>Depuis 1998, Nantes Métropole Développement a accompagné plus de 800 entreprises dans leur installation sur l’agglomération, contribuant à la création de plus de 12 000 emplois.</p>
+									<p>L’agence, dirigée par Patrick Robert, compte 18 collaborateurs.<br />
+									Depuis 1998, elle a accompagné plus de 1 000 entreprises contribuant à la création de 22 000 emplois.</p>
+									<p>Ses services aux entreprises sont certifiés ISO 9001.</p>
 									<a href="htttp://www.nantes-developpement.com" title="">www.nantes-developpement.com</a>
 								</div>
+								
 								<hr class="clear" />
 							</div>
-							<div id="service" class="inactive onglet">
+							<div id="service" class="active onglet">
 								<h2>A Nantes, placez vos projets d’entreprise <strong>sous une bonne étoile</strong></h2>
 								<div class="colleft">
-									<strong>Nous partageons vos objectifs</strong><br>
-									Nous apportons les réponses adaptées à vos besoins en fonction de votre cahier des charges et ce, sans contrepartie financière.<br>
-									<br>
-									<strong>Nous identifions l’offre territoriale</strong><br>
-									Offre immobilière et foncière, potentiel marché, recrutement, nous apportons tous les informations nécessaires à votre prise de décision.<br>
-									<br>
-									<strong>Nous mobilisons nos partenaires</strong><br>
-									Nous collaborons avec les experts locaux pour faciliter votre implantation : commercialisateurs immobiliers, cabinets RH, établissements financiers, administrations... 
+									<strong>Aide à la décision</strong><br>
+									<ul>
+										<li>Installation de votre entreprise : mobilité des salariés, déménagement, démarches administratives, recrutement, planification...</li>
+										<li>Présentation de l’agglomération nantaise
+											<ul>
+												<li><span>Chiffres clés (démographie, emploi, économie...)</span></li>
+												<li><span>Secteurs d’activité</span></li>
+												<li><span>Offre de formation</span></li>
+												<li><span>Grands projets</span></li>
+												<li><span>Vie quotidienne</span></li>
+											</ul>
+										</li>
+										<li>Fonctionnement de l’économie locale (réseaux et clubs d’entreprises, structures d’accompagnement et dispositifs d’aides...)</li>
+									</ul>								
 								</div>
 								<div class="colright">
-									<strong>Nous accompagnons vos salariés</strong><br>
-									Présentation de l’agglomération, recherche d’un logement, emploi du conjoint... Nous facilitons l’intégration de vos salariés sur la métropole nantaise.<br>
-									<br>
-									<strong>Nous accélérons votre intégration</strong><br>
-									Communication sur votre implantation, mise en relation avec les prescripteurs, participation aux événements locaux, nous vous aidons dans votre intégration.
+									<strong>Recherche immobilière</strong><br>
+									<ul>
+										<li>Présentation des sites d’activités : entreprises présentes, transports, restauration, services de proximité</li>
+										<li>Conseil sur le mode d’hébergement (bureau, centre d’affaires, local d’activité, pépinière, hôtel d’entreprises...)</li>
+										<li>Propositions immobilières avec l’aide de nos partenaires commercialisateurs</li>
+										<li>Visite guidée des sites identifiés sur la métropole nantaise</li>
+									</ul>							
+								</div>
+								<hr class="clear">
+								<div class="colleft">
+									<strong>Accompagnement des salariés</strong>
+									<ul>
+										<li>Présentation de Nantes au sein de votre entreprise : cadre de vie, logement, déplacements, loisirs, scolarité...</li>
+										<li>Organisation de visites « découverte » de Nantes</li>
+										<li>Suivi individualisé des salariés et de leur famille</li>
+										<li>Aide à la recherche de l’emploi du conjoint</li>
+									</ul>										
+								</div>
+								<div class="colright">
+									<strong>Intégration locale</strong>
+									<ul>
+										<li>Communication sur l’implantation de votre entreprise </li>
+										<li>Appui à vos besoins en recrutement</li>
+										<li>Mise en relation avec les réseaux locaux</li>
+										<li>Participation à des événements et rencontres entre dirigeants</li>
+									</ul>								
 								</div>
 								<hr class="clear">
 							</div>
 						</div>
 						<ul class="nav_footer">						
-							<li><a href="#service">Les services</a></li>
+							<li><a class="inactive" href="#service">Nos services</a></li>
 							<li class="active"><a href="#qui_sommes_nous" >Qui sommes-nous ?</a></li>
 						</ul>
 						<hr class="clear" />
@@ -144,50 +196,51 @@
 						<ul class="navigation">
 							<li class="un"><a href="#cahier_charges" title="Votre cahier des charges"><span>Votre cahier des charges</span></a></li>
 							<li class="deux"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
-							<li class="trois"><a href="#services" title="Les services de l'agence"><span>Les services de l'agence</span></a></li>
+							<li class="trois"><a href="#services" title="Nos services"><span>Nos services</span></a></li>
 							<li class="quatre active"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
-							<li class="mobile telecharger_pdf"><a onclick="window.open(this.href); return false;" ng-href="{{pdfURL}}" title="Télécharger votre dossier au format PDF"><img alt="Télécharger votre dossier au format PDF" src="images/landing/ico-pdf-mobile.gif"></a></li>
-							<li class="mobile demande_contact"><a href="mailto:cduveau@nantes-developpement.com?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mobile.gif"></a></li>						
+							<li class="mobile demande_contact"><a ng-href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations " title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mel-mobile.gif"></a></li>
+							<li class="mobile telephone demande_contact"><a href="tel:{{dossier.assigned_user.phone_work}}"  title="Contactez nous par téléphone"><img alt="Contactez nous par téléphone" src="images/landing/ico-contact-tel-mobile.gif"></a></li>
 						</ul>
 						<div class="inner">
 							<div class="contenu_article active onglet" id="attractivite">
 								<div class="colleft">
 									<h2>Une ville <strong>attractive</strong></h2>
-									<strong>Nantes se place régulièrement en tête des<br> palmarès des villes où il fait bon vivre</strong>
+									<strong>Secteur tertiaire dynamique, socle industriel puissant, capacité créative : la métropole nantaise attire entreprises et talents.</strong>
 									<ul>
 										<li>Une métropole de 600 000 habitants</li>
 										<li>5<sup>ème</sup> agglomération française par sa<br>croissance démographique</li>
-										<li>+ 60 000 emplois en 10 ans</li>
-										<li>Capitale verte de l’Europe en 2013</li>
+										<li>100 000 habitants supplémentaires d’ici 2030</li>
+										<li>+ 60 000 emplois en 10 ans</li>										
 									</ul>
+									<a href="http://www.nantes-developpement.com/emploi-formation/emploi-nantes/de-paris-a-nantes-des-dirigeants-temoignent" class="temoignage" title="Ils ont choisi Nantes et ils témoignent" onclick="window.open(this.href); return false;">Ils ont choisi Nantes et ils témoignent</a>
+									<a href="http://www.nantes-developpement.com/portlets/ressources/les-editions-realisees-par-nantes-metropole-developpement" title="En savoir plus sur l’économie Nantaise  " onclick="window.open(this.href); return false;">En savoir plus sur l’économie nantaise</a>
+									<ul>
+										<li>Présentation du territoire</li>
+										<li>Secteur d’activité</li>
+										<li>Grands projets</li>
+									</ul>
+									
 								</div>
 								<div class="colright">
-									<a href="http://youtu.be/-wuND5x6IU8" class="nyroModal" rel="gal">
-									<img alt="Nantes en projets" src="images/landing/nantes-en-projet.gif"></a>
-									<span class="idgrlg">Nantes <span class="idblbo">en 2 minutes</span></span>
-								</div>
-								<hr class="clear">
-							</div>
-							<div class="contenu_article inactive onglet" id="telechargement">
-								<div class="colleft">								
-								</div>
-								<div class="colright">								
+									<a href="http://youtu.be/gAd9E5vGNrQ" class="nyroModal" rel="gal">
+										<img alt="Nantes en projets" src="images/landing/nantes-en-projet.gif">
+									</a>
+									<div class="mobile" id="lecteur_mobile">
+										<iframe width="260" height="195" src="//www.youtube.com/embed/gAd9E5vGNrQ?rel=0" frameborder="0" allowfullscreen></iframe>
+									</div>
+									<span class="idgrlg">Nantes <span class="idblbo">en projets</span></span>
 								</div>
 								<hr class="clear">
 							</div>
 						</div>
-						<ul class="nav_footer">						
-							<li class="active"><a href="#attractivite">Nantes</a></li>
-							<li><a ng-href="{{pdfURL}}" >Téléchargement</a></li>
-						</ul>
 						<hr class="clear" />
 					</div>					
 				</div>
 			</div>
 			<div id="leftbar">
 				<div class="inner">
-					<h4><a title="" ng-href="{{pdfURL}}" class="telecharger_pdf" onclick="window.open(this.href); return false;"><em>Télécharger</em> le détails de vos offres</a></h4>
-					<a title="" ng-href="{{pdfURL}}" class="telecharger_pdf_image" onclick="window.open(this.href); return false;">
+					<h4><a title="Télécharger le détail de vos offres" ng-href="{{pdfURL}}" class="telecharger_pdf" onclick="window.open(this.href); return false;"><em>Télécharger</em> le détail de vos offres</a></h4>
+					<a title="Télécharger le détail de vos offres" ng-href="{{pdfURL}}" class="telecharger_pdf_image" onclick="window.open(this.href); return false;">
 						<img src="images/landing/telechargement-pdf.png" alt="Télécharger votre dossier au format PDF" />
 					</a>
 					<hr class="clear" />
@@ -196,14 +249,14 @@
 			<div id="rightbar">
 				<div class="mobile bg_layer"></div>
 				<div id="bloc_contact">
-					<img style="max-width:100%" ng-src="images/landing/{{dossier.assigned_user.id}}.jpg" alt="Claire DUVEAU" />
+					<img ng-src="images/landing/{{dossier.assigned_user.id}}.jpg" alt="{{dossier.assigned_user.first_name}} {{dossier.assigned_user.last_name}}" />
 					<h4>Votre contact</h4>
 					<address>{{dossier.assigned_user.first_name}} <strong>{{dossier.assigned_user.last_name}}</strong><br>
 						<em>{{dossier.assigned_user.title}}</em>
 						<span><strong>Tél.</strong> : {{dossier.assigned_user.phone_work}}</span>
 						<br>
 					</address>
-					<a ng-href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations ">
+					<a href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations ">
 						<img alt="Me contacter" src="images/landing/me-contacter.gif">
 					</a>
 					<ul>
@@ -216,21 +269,12 @@
 				</div>
 			</div>
 			<hr class="clear" />
-			<ul id="addthis_footer" class="addthis">
-				<li class="addthis_toolbox addthis_default_style">
-					<a class="addthis_button_print"></a>
-					<a class="addthis_button_email"></a>
-				</li>
-				<li>Sauvegarder :&nbsp;</li>
-			</ul>
-			<hr class="clear" />
 		</div>
 		<div id="footer">
 			<a href="http://www.nantes-developpement.com" title="www.nantes-developpement.com" onclick="window.open(this.href); return false;">Nantes Métropole Développement</a> est un outil opérationnel au service des entreprises, créé et financé par la <a href="http://www.nantesmetropole.fr" title="www.nantesmetropole.fr" onclick="window.open(this.href); return false;">communauté urbaine	de Nantes</a>.<br /> Visiter notre site <a href="http://www.nantes-developpement.com" title="www.nantes-developpement.com" onclick="window.open(this.href); return false;">www.nantes-developpement.com</a> | <a href="http://www.nantes-developpement.com/formulaires/contactez-nous" title="Contacter Nantes M&eacute;tropole D&eacute;veloppement" onclick="window.open(this.href); return false;">Nous contacter</a>
 		</div>			
 	</div>
 
-	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
 	<script type="text/javascript">
 
 	  var _gaq = _gaq || [];

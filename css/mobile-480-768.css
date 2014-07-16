@@ -11,6 +11,11 @@ Description: GregLudo
 /* STRUCTURE */
 /* --------- */
 
+.addthis {
+    margin: 0 5%;
+    width: 90%;
+}
+
 #page {
 	position: relative;
 	margin: 0px auto;
@@ -29,7 +34,8 @@ Description: GregLudo
 }
 
 .image_header img{
-width:100%;
+max-width:100%;
+width:auto;
 height:auto;
 }
 
@@ -48,7 +54,7 @@ width:100%;
 	background: #FFFFFF;
 	padding: 130px 30px 30px 30px;
 	position:relative;
-	padding: 130px 4.3% 30px 4.3%;
+	padding: 130px 4.35% 30px 4.35%;
 }
 
 #leftbar{
@@ -119,6 +125,7 @@ a.telecharger_pdf_image img{
 	float:left;
 	margin-right:0%;
 	padding:0;
+	width:100%;
 }
 
 #bloc_contact h4,
@@ -144,14 +151,17 @@ a.telecharger_pdf_image img{
 }
 
 #bloc_contact a{
-    margin: 0 3% 0 0 ;
+    margin: 0 3% 0 0;
+	width:30%;
 }
 
+#attractivite .colright .nyroModal{display:none;}
+#attractivite .colright .mobile{display:block;}
 
 
 #footer {
-	background: white url(../images/landing/bg-footer.gif) no-repeat center top;
-	padding-top: 175px;
+	background: trnsparent url(../images/landing/bg-footer.gif) no-repeat center 30px;
+	padding-top: 205px;
 	width:690px;
 	margin:0;
 	text-align: center;

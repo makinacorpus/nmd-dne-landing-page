@@ -11,15 +11,19 @@ Description: GregLudo
 /* STRUCTURE */
 /* --------- */
 
+
 .mobile{display:block;}
 
 #page {
 	max-width: 480px;
 	width:100%;
+	margin:0;
+	padding:0;
+	display:block;
 }
 
 #header {
-	width:91.3%;
+	width:92%;
 	background: transparent url(../images/landing/header.png) no-repeat right top;
 	position:absolute;
 	top:0px;
@@ -35,7 +39,8 @@ height:auto;
 
 #content {
 	padding: 0px 0px;
-	width:100%;	
+	width:100%;
+	float:none;
 }
 
 #main{
@@ -48,6 +53,8 @@ height:auto;
 
 #rightbar{
 	position:static;
+	height:auto;
+	padding-top:20px;
 }
 
 #bloc_contact {
@@ -57,11 +64,12 @@ height:auto;
     left: 50%;
     margin: 0 auto 0 -90px;
     padding: 45px 15px 0px 15px;
-    position: fixed;
+    position: absolute;
     text-align: center;
     top: 20px;
     width: 150px;
 	z-index:20000;
+	display:none;
 }
 
 .bg_layer{
@@ -72,7 +80,7 @@ height:auto;
 	 top:0;
 	 left:0;
 	 z-index:10000;
-	 
+	 display:none;
 }
 
 #bloc_contact .mobile{
@@ -111,6 +119,10 @@ height:auto;
 
 #services .colleft, 
 #services .colright,
+#services #service .colleft,
+#services #service .colright,
+#services #qui_sommes_nous .colleft,
+#services #qui_sommes_nous .colright,
 #cahier_charges .inner .colleft,
 #cahier_charges .inner .colright,
 #attractivite .colleft,
@@ -131,7 +143,13 @@ height:auto;
 #services.motif .inner h2,
 #territoire.motif .inner h2{
 	margin:0 0 25px -4.4%;
-	width:104.4%;
+	width:100%;
+}
+
+#services #service .colleft,
+#services #service .colright{
+	float:none;
+	width:100%;
 }
 
 #attractivite .colright{
@@ -141,6 +159,8 @@ height:auto;
 #attractivite .colright .idgrlg{
 	display:block;
 }
+
+#attractivite .colright .nyroModal{display:none;}
 
 #propositions .inner .liste_offre ol li {
     background: none repeat scroll 0 0 #ffffff;
@@ -225,6 +245,8 @@ overflow:hidden;
 border:0;
 }
 
+.navigation li.trois a{line-height:20px;}
+
 #cahier_charges li.trois,
 #cahier_charges li.quatre,
 #propositions li.quatre,
@@ -233,7 +255,7 @@ border:0;
 #territoire li.deux{display:none;}
 
 
-.navigation li.telecharger_pdf a,
+.navigation li.demande_contact.telephone a,
 .navigation li.demande_contact a {
     background: none repeat scroll 0 0 #ffffff;
     border-bottom: 0px solid #41454d;
@@ -247,7 +269,121 @@ border:0;
 	right:0px;
 }
 
-.navigation li.telecharger_pdf a{
+.navigation li.demande_contact a{
 
 	right:40px;
 }
+
+/************************************/
+/**				HEADER			   **/
+/************************************/
+
+
+#pdf_contact_header {
+	width:100%;
+	background:#0f71ba;
+}
+
+#pdf_contact_header #bloc_pdf_header,
+#pdf_contact_header #bloc_contact_header{
+	float:left;
+	width:38%;
+	padding: 20px 6%;
+	min-height:230px;
+}
+#pdf_contact_header #bloc_contact_header{}
+
+#pdf_contact_header #bloc_pdf_header{
+    background: url("../images/landing/bg-telechargement.gif") repeat-y scroll right top #40444d;
+    text-align: center;
+}
+
+#pdf_contact_header #bloc_pdf_header h4 {
+    font-size: 1.4em;
+    line-height: 115%;
+    margin-bottom: 15px;
+}
+#pdf_contact_header #bloc_pdf_header h4 a {
+    color: #ffffff;
+    font-family: 'idealista_lightregular';
+}
+#pdf_contact_header #bloc_pdf_header h4 a em {
+    color: #ffffff;
+    font-family: 'idealistabold';
+    font-style: normal;
+	display:block;
+}
+#pdf_contact_header #bloc_pdf_header h4 a strong {
+    color: #0d71bc;
+    display: block;
+    font-family: 'idealistabold';
+    text-transform: uppercase;
+}
+
+#pdf_contact_header #bloc_contact_header{
+    background: url("../images/landing/bg-contact.gif") repeat-y scroll left top #0f71ba;
+    color: #40444d;
+    font-style: normal;
+    margin: 0;
+    position: relative;
+    text-align: center;
+}
+
+/**/
+#pdf_contact_header #bloc_contact_header h4 {
+    display:none;
+}
+
+#pdf_contact_header #bloc_contact_header img{
+	max-width:100px;
+}
+
+#pdf_contact_header #bloc_contact_header address {
+    color: #ffffff;
+    float: left;
+    font-size: 16px;
+    line-height: 110%;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    text-align: center;
+    width: 100%;
+}
+
+#pdf_contact_header #bloc_contact_header address em {
+    color: #40444d;
+    display: block;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 90%;
+    padding: 5px 0;
+}
+#pdf_contact_header #bloc_contact_header address span {
+    font-size: 12px;
+}
+#pdf_contact_header #bloc_contact_header a {
+    box-shadow: 2px 2px 3px 0 rgba(50, 50, 50, 0.5);
+}
+#pdf_contact_header #bloc_contact_header ul li a,
+#pdf_contact_header #bloc_contact_header address a {
+    box-shadow: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -57,6 +57,10 @@ Description: GregLudo
 	text-transform:uppercase;
 }
 
+#propositions .inner h2 {line-height:110%;}
+
+#propositions .inner h2 strong{display:block;}
+
 #propositions .inner #map{
 	width:109.52%;
 	margin-left:-4.76%;
@@ -117,19 +121,83 @@ font-family: Arial;
 
 /* QUI_SOMMES_NOUS */
 
-#services .colleft, #services .colright {
-    float: left;
+#services .colleft{
+	
+	
+	}
+
+#services .colleft, 
+#services .colright {    
     margin: 0;
+}
+#services #qui_sommes_nous .colright {
+	float: right;
+    margin-left: 10%;
     width: 44%;
 }
-#services .colright {
-    margin-left: 12%;
+
+#services #qui_sommes_nous .colright strong{
+	font-size:1.5em;
+	font-weight:bold;
+	font-family: 'idealistabold';
+	color:#0d70bc;
+	margin-left:-5px;
+}
+
+#services .colright ul{margin:15px 0px 0px 0px;}
+
+#services #qui_sommes_nous .colright ul li{
+	list-style:none inside;
+	margin:10px 0px;
 }
 
 #services .colleft ul li{list-style:disc inside;}
-#services .colleft ul {margin:15px 0px 0px 20px;}
+#services .colleft ul{margin:10px 0px 10px 10px;}
 
 #qui_sommes_nous .colright a{color:#0d70bc;}
+
+#services #service .colleft, 
+#services #service .colright {    
+    margin: 0;
+	float:left;
+	width:40%;
+}
+#services #service .colleft{
+	margin-right:5%;
+	width:55%;
+}
+#services #service .colleft ul li{
+	margin:10px 10% 10px 0px;
+}
+/*
+#services #service .colleft{
+	width:60%;
+	margin-right:10%;
+}
+
+#services #service .colright{width:30%;}
+*/
+#services #service .colleft ul ul{
+    margin: 10px 0 10px 20px;
+	color:#0d70bc;
+}
+
+#services #service .colleft ul ul li span{
+	color:#40444d;
+}
+
+#services .colright ul li{
+	list-style:disc inside;
+	margin:10px 0px 10px 10px;
+}
+
+#servicesv h2 strong{
+	margin-top:20px;
+	color:#0d70bc;
+	font-family: 'idealistabold';
+	font-size:1.3em;
+}
+
 /* TERRITOIRE */
 
 #attractivite h2 {
@@ -141,6 +209,24 @@ font-family: Arial;
 #attractivite h2 .idblbo {
     text-transform: uppercase;
 }
+
+#attractivite .colleft ul {margin:15px 0px 0px 25px;}
+
+#attractivite .colleft a{
+	color:#0d70bc;
+	font-family: 'idealistabold';
+	font-weight:bold;
+	text-decoration:underline;
+	font-size:1.2em;
+}
+
+#attractivite .colleft a.temoignage{
+	display:block;
+	padding-top:15px;
+	padding-bottom:20px;
+	
+}
+
 #attractivite .colright {
     text-align: center;
 }
@@ -205,12 +291,15 @@ font-family: Arial;
 	height:30px;
 }
 .nav_footer li:first-child{
-	display:block;
 	float:left;
 }
 .nav_footer li{
 	float:right;
 }
+
+.nav_footer li {display:none;}
+.nav_footer li.active {display:block;}
+
 
 .nav_footer li a{
 	background:#cfd0d2;
@@ -250,7 +339,9 @@ font-family: Arial;
 	background: transparent url("../images/landing/sprite.png") no-repeat -62px -30px;
 }
 
-
+.nav_footer li.active:first-child a:before{
+	background: transparent url("../images/landing/sprite.png") no-repeat -60px -56px;
+}
 
 .nav_footer li a{
 	padding: 0px 30px 0px 10px;

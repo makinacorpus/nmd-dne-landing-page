@@ -47,6 +47,8 @@ Description: GregLudo
 	padding:10px 12%;
 	font-weight:normal;
 }
+
+.navigation li.trois a {line-height: 33px;}
 		
 .navigation li.active a{
 	background:#0d70bc;
