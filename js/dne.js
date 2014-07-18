@@ -91,11 +91,10 @@ angular.module('dne.controllers').controller('DNEController',
         $scope.today = new Date();
         $scope.dossierID = $location.url().split('/')[1];
 
-        var mapURL = baseURL + '/embed/#';
+        var mapURL = baseURL + '/embed/#/';
         var pdfURL = baseURL + '/downloads/';
         $scope.mapURL = $sce.trustAsResourceUrl(mapURL + $scope.dossierID);
         $http.get('/view/dne/'+ $scope.dossierID).then(function(data){
-            
             $scope.dossier = data.data;
             if (data.data.offreimmo !== null){
                 $scope.pdfURL = $sce.trustAsResourceUrl(pdfURL + data.data.offreimmo);
