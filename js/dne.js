@@ -46,10 +46,11 @@ angular.module('dne.controllers').controller('DNEController',
         $scope.socialnetworks['2cb4f040-0bcf-80c4-c072-4c52eb727460'] = [
             {id: 'viadeo', title:'Viadeo', url:'http://fr.viadeo.com/fr/profile/julie.letan'}
         ];
-/*        $scope.socialnetworks[''] = [
+        $scope.socialnetworks[''] = [
+            {id: 'twitter', title:'Twitter', url: 'https://twitter.com/CheruetteJulie'},
             {id: 'linkedin', title:'LinkedIn', url:'https://www.linkedin.com/pub/julie-cheruette/53/798/146'},
             {id: 'viadeo', title:'Viadeo', url:'http://fr.viadeo.com/fr/profile/julie.cheruette'}
-        ];*/
+        ];
         $scope.socialnetworks['c3da9211-7b7a-aa96-084d-4c52eb7b7336'] = [
             {id: 'viadeo', title:'Viadeo', url:'http://fr.viadeo.com/fr/profile/frederic.chauchet'}
         ];
@@ -91,10 +92,11 @@ angular.module('dne.controllers').controller('DNEController',
         $scope.today = new Date();
         $scope.dossierID = $location.url().split('/')[1];
 
-        var mapURL = baseURL + '/embed/#/'; /* and now ?*/
+        var mapURL = baseURL + '/embed/#/';
         var pdfURL = baseURL + '/downloads/';
         $scope.mapURL = $sce.trustAsResourceUrl(mapURL + $scope.dossierID);
         $http.get('/view/dne/'+ $scope.dossierID).then(function(data){
+            
             $scope.dossier = data.data;
             if (data.data.offreimmo !== null){
                 $scope.pdfURL = $sce.trustAsResourceUrl(pdfURL + data.data.offreimmo);

@@ -63,8 +63,8 @@
 						</ul>
 						<div class="inner">						
 							<ul class="colleft">
-								<li><strong>Type de local : </strong><span>{{dossier.type}}</span></li>
-								<li><strong>Type d’occupation : </strong><span ng-repeat="value in getSugarCRMValueList(dossier.type_local)">{{value}}{{$last ? '' : ', '}}</span></li>			
+								<li><strong>Type de local : </strong><span ng-repeat="value in getSugarCRMValueList(dossier.type_local)">{{value}}{{$last ? '' : ', '}}</span></li>
+								<li><strong>Type d’occupation : </strong><span>{{dossier.type}}</span></li>			
 							</ul>
 							<ul class="colright">
 								<li><strong>Echéance : </strong><span>{{getDate(dossier.echeance_reponse_c) | date : 'dd/MM/yyyy'}}</span></li>
