@@ -158,5 +158,8 @@ angular.module('dne.controllers').controller('DNEController',
             }
             return results;
         };
+        $scope.sanitizeText = function(text){
+            return text.replace('&#039', '\'').replace('&quot;','"').replace('\n', '<br/>');
+        };
     }]
 );
