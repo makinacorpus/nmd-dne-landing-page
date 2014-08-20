@@ -78,11 +78,11 @@
 }
 
 #bloc_contact ul li a.twitter {
-    background-position: 0 -90px;
+    background-position: -30px -90px;
 }
 
 #bloc_contact ul li a.viadeo {
-    background-position: -30px -90px;
+    background-position: 0 -90px;
 }
 
 #bloc_contact a{
