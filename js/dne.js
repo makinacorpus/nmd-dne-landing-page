@@ -161,7 +161,7 @@ angular.module('dne.controllers').controller('DNEController',
         $scope.sanitizeSugarCRMValue = function(value){
             if (value){
                 return $sce.trustAsHtml(value.replace('_', ' ').replace('&#039', '\'')
-                .replace('&quot;','"').replace('\n', '<br/>'));
+                .replace('&quot;','"').replace(/[\n\r]/g, '<br/>'));
             }else{
                 return value;
             }
