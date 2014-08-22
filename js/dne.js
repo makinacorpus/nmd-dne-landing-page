@@ -92,7 +92,7 @@ angular.module('dne.controllers').controller('DNEController',
         $scope.today = new Date();
         $scope.dossierID = $location.url().split('/')[1];
 
-        var mapURL = baseURL + '/embed/#';
+        var mapURL = baseURL + '/embed/#/';
         var pdfURL = baseURL + '/downloads/';
         $scope.mapURL = $sce.trustAsResourceUrl(mapURL + $scope.dossierID);
         $http.get('/view/dne/'+ $scope.dossierID).then(function(data){
@@ -158,8 +158,13 @@ angular.module('dne.controllers').controller('DNEController',
             }
             return results;
         };
-        $scope.sanitizeText = function(text){
-            return text.replace('&#039', '\'').replace('&quot;','"').replace('\n', '<br/>');
+        $scope.sanitizeSugarCRMValue = function(value){
+            if (value){
+                return $sce.trustAsHtml(value.replace('_', ' ').replace('&#039', '\'')
+                .replace('&quot;','"').replace('\n', '<br/>'));
+            }else{
+                return value;
+            }
         };
     }]
 );

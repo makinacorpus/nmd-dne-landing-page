@@ -48,7 +48,8 @@ Description: GregLudo
 	font-weight:normal;
 }
 
-.navigation li.trois a {line-height: 33px;}
+.navigation li.trois a,
+.navigation li.un a {line-height: 33px;}
 		
 .navigation li.active a{
 	background:#0d70bc;

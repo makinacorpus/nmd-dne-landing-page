@@ -40,10 +40,10 @@
 						<div id="bloc_contact_header">
 							<img ng-src="images/landing/{{dossier.assigned_user.id}}.jpg" alt="{{dossier.assigned_user.first_name}} {{dossier.assigned_user.last_name}}" />
 							<h4>Votre contact</h4>
-							<address>{{dossier.assigned_user.first_name}} <strong>{{dossier.assigned_user.last_name}}</strong><br>
+							<address>{{dossier.assigned_user.first_name}} <strong>{{dossier.assigned_user.last_name}}</strong><br/>
 								<em>{{dossier.assigned_user.title}}</em>
 								<span><strong>Tél.</strong> : {{dossier.assigned_user.phone_work}}</span>
-								<br>
+								<br/>
 							</address>
 							<a ng-href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations ">
 								<img alt="Me contacter" src="images/landing/me-contacter.gif">
@@ -54,7 +54,7 @@
 					</div>
 					<div id="cahier_charges" class="motif">
 						<ul class="navigation">
-							<li class="un active"><a href="#cahier_charges" title="Votre cahier des charges"><span>Votre cahier des charges</span></a></li>
+							<li class="un active"><a href="#cahier_charges" title="Votre projet"><span>Votre projet</span></a></li>
 							<li class="deux"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
 							<li class="trois"><a href="#services" title="Nos services"><span>Nos services</span></a></li>
 							<li class="quatre"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
@@ -62,22 +62,12 @@
 							<li class="mobile telephone demande_contact"><a href="tel:{{dossier.assigned_user.phone_work}}"  title="Contactez nous par téléphone"><img alt="Contactez nous par téléphone" src="images/landing/ico-contact-tel-mobile.gif"></a></li>
 						</ul>
 						<div class="inner">						
-							<ul class="colleft">
-								<li><strong>Type de local : </strong><span ng-repeat="value in getSugarCRMValueList(dossier.type_local)">{{value}}{{$last ? '' : ', '}}</span></li>
-								<li><strong>Type d’occupation : </strong><span>{{dossier.type}}</span></li>			
-							</ul>
-							<ul class="colright">
-								<li><strong>Echéance : </strong><span>{{getDate(dossier.echeance_reponse_c) | date : 'dd/MM/yyyy'}}</span></li>
-							</ul>
-							<hr class="clear" />
-							<ul>
-								<li><strong>Informations complémentaires : </strong><br /><span>{{sanitizeText(dossier.description)}}</span></li>
-							</ul>
+							<span ng-bind-html="sanitizeSugarCRMValue(dossier.description)"></span>
 						</div>					
 					</div>
 					<div id="propositions" class="motif">
 						<ul class="navigation">
-							<li class="un"><a href="#cahier_charges" title="Votre cahier des charges"><span>Votre cahier des charges</span></a></li>
+							<li class="un"><a href="#cahier_charges" title="Votre projet"><span>Votre projet</span></a></li>
 							<li class="deux active"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
 							<li class="trois"><a href="#services" title="Nos services"><span>Nos services</span></a></li>
 							<li class="quatre"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
@@ -87,7 +77,7 @@
 						<div class="inner">
 							<h2><strong>{{offres.length}} offres immobilières</strong> sélectionnées pour votre entreprise </h2>
 							<div id="map">
-								<iframe ng-src="{{mapURL}}" width="100%" height="450"></iframe>
+								<iframe ng-src="{{mapURL}}" width="100%" height="480"></iframe>
 							<!-- IFRAME MAP -->
 							</div>
 							<div class="liste_offre">
@@ -101,7 +91,7 @@
 					</div>
 					<div id="services" class="motif">
 						<ul class="navigation">
-							<li class="un"><a href="#cahier_charges" title="Votre cahier des charges"><span>Votre cahier des charges</span></a></li>
+							<li class="un"><a href="#cahier_charges" title="Votre projet"><span>Votre projet</span></a></li>
 							<li class="deux"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
 							<li class="trois active"><a href="#services" title="Nos services"><span>Nos services</span></a></li>
 							<li class="quatre"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
@@ -140,7 +130,7 @@
 							<div id="service" class="active onglet">
 								<h2>A Nantes, placez vos projets d’entreprise <strong>sous une bonne étoile</strong></h2>
 								<div class="colleft">
-									<strong>Aide à la décision</strong><br>
+									<strong>Aide à la décision</strong><br/>
 									<ul>
 										<li>Installation de votre entreprise : mobilité des salariés, déménagement, démarches administratives, recrutement, planification...</li>
 										<li>Présentation de l’agglomération nantaise
@@ -156,7 +146,7 @@
 									</ul>								
 								</div>
 								<div class="colright">
-									<strong>Recherche immobilière</strong><br>
+									<strong>Recherche immobilière</strong><br/>
 									<ul>
 										<li>Présentation des sites d’activités : entreprises présentes, transports, restauration, services de proximité</li>
 										<li>Conseil sur le mode d’hébergement (bureau, centre d’affaires, local d’activité, pépinière, hôtel d’entreprises...)</li>
@@ -194,7 +184,7 @@
 					</div>
 					<div id="territoire" class="motif">
 						<ul class="navigation">
-							<li class="un"><a href="#cahier_charges" title="Votre cahier des charges"><span>Votre cahier des charges</span></a></li>
+							<li class="un"><a href="#cahier_charges" title="Votre projet"><span>Votre projet</span></a></li>
 							<li class="deux"><a href="#propositions" title="Propositions immobilières"><span>Propositions immobilières</span></a></li>
 							<li class="trois"><a href="#services" title="Nos services"><span>Nos services</span></a></li>
 							<li class="quatre active"><a href="#territoire" title="Découverte du territoire"><span>Découverte du territoire</span></a></li>
@@ -208,7 +198,7 @@
 									<strong>Secteur tertiaire dynamique, socle industriel puissant, capacité créative : la métropole nantaise attire entreprises et talents.</strong>
 									<ul>
 										<li>Une métropole de 600 000 habitants</li>
-										<li>5<sup>ème</sup> agglomération française par sa<br>croissance démographique</li>
+										<li>5<sup>ème</sup> agglomération française par sa<br/>croissance démographique</li>
 										<li>100 000 habitants supplémentaires d’ici 2030</li>
 										<li>+ 60 000 emplois en 10 ans</li>										
 									</ul>
@@ -251,10 +241,12 @@
 				<div id="bloc_contact">
 					<img ng-src="images/landing/{{dossier.assigned_user.id}}.jpg" alt="{{dossier.assigned_user.first_name}} {{dossier.assigned_user.last_name}}" />
 					<h4>Votre contact</h4>
-					<address>{{dossier.assigned_user.first_name}} <strong>{{dossier.assigned_user.last_name}}</strong><br>
+					<address>{{dossier.assigned_user.first_name}} <strong>{{dossier.assigned_user.last_name}}</strong><br/>
 						<em>{{dossier.assigned_user.title}}</em>
-						<span><strong>Tél.</strong> : {{dossier.assigned_user.phone_work}}</span>
-						<br>
+						<span><strong>Tél.</strong> : <a href="tel:{{dossier.assigned_user.phone_work}}" style="color: white;box-shadow: none;">{{dossier.assigned_user.phone_work}}</a></span>
+						<br/>
+						<span><strong>Mob.</strong> : <a href="tel:{{dossier.assigned_user.phone_mobile}}" style="color: white;box-shadow: none;">{{dossier.assigned_user.phone_mobile}}</a></span>
+						<br/>
 					</address>
 					<a href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations ">
 						<img alt="Me contacter" src="images/landing/me-contacter.gif">
