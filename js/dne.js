@@ -54,6 +54,11 @@ angular.module('dne.controllers').controller('DNEController',
         $scope.socialnetworks['c3da9211-7b7a-aa96-084d-4c52eb7b7336'] = [
             {id: 'viadeo', title:'Viadeo', url:'http://fr.viadeo.com/fr/profile/frederic.chauchet'}
         ];
+        $scope.socialnetworks['7dfa171b-89f6-d3b3-4bd5-4c52ebf7847e'] = [
+            {id: 'twitter', title:'Twitter', url: 'https://twitter.com/emilievarin'},
+            {id: 'linkedin', title:'LinkedIn', url:'http://fr.linkedin.com/pub/emilie-varin/3b/49/450'},
+            {id: 'viadeo', title:'Viadeo', url:'http://fr.viadeo.com/fr/profile/varin.emilie'}
+        ];
         $scope.dossier = {
             name: 'Project title',
             date: 'JJ/MM/AA',
