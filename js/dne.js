@@ -114,6 +114,7 @@ angular.module('dne.controllers').controller('DNEController',
         };
         var loadLocatedOffreImmo = function(maps){
             $scope.offres = [];
+            var i;
             var getOffreIndex = function(offre){
                 if (offre.type === 'projects'){
                     return parseInt(offre.source.mapLabel, 10);
@@ -124,7 +125,7 @@ angular.module('dne.controllers').controller('DNEController',
             var offresDiffuses = JSON.parse(maps.drawnFeatures) || [];
             var offresPerennes = maps.projects || [];
             if (offresPerennes.length > 0){
-                for (var i = 0; i < offresPerennes.length; i++) {
+                for (i = 0; i < offresPerennes.length; i++) {
                     $scope.offres.push({
                         label: offresPerennes[i].nom,
                         source: offresPerennes[i],
@@ -133,7 +134,7 @@ angular.module('dne.controllers').controller('DNEController',
                 }
             }
             if (offresDiffuses.length > 0){
-                for (var i = 0; i < offresDiffuses.length; i++) {
+                for (i = 0; i < offresDiffuses.length; i++) {
                     $scope.offres.push({
                         label: offresDiffuses[i].properties.label || 'offre diffuse',
                         source: offresDiffuses[i],
@@ -144,9 +145,9 @@ angular.module('dne.controllers').controller('DNEController',
             //update order, depend on storage            
             $scope.offres.sort(function(a, b){
                 if (getOffreIndex(a) < getOffreIndex(b))
-                    return -1;
+                    {return -1;}
                 if (getOffreIndex(a) > getOffreIndex(b))
-                    return 1;
+                    {return 1;}
                 return 0;
             });
         };
@@ -166,7 +167,7 @@ angular.module('dne.controllers').controller('DNEController',
         $scope.sanitizeSugarCRMValue = function(value){
             if (value){
                 return $sce.trustAsHtml(value.replace('_', ' ').replace('&#039', '\'')
-                .replace('&quot;','"').replace(/[\n\r]/g, '<br/>'));
+                .replace('&quot;','"').replace(/[\n]/g, '<br/>'));
             }else{
                 return value;
             }
