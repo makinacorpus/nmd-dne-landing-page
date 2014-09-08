@@ -84,6 +84,9 @@
 #bloc_contact ul li a.viadeo {
     background-position: 0 -90px;
 }
+#bloc_contact ul li a.linkedin {
+    background: url("../images/landing/ico-contact-linkedin.gif");
+}
 
 #bloc_contact a{
 	-webkit-box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.5);
