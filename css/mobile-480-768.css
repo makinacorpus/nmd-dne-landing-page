@@ -73,7 +73,7 @@ width:100%;
 	width: 80%;
 	background: transparent none;
 	padding:30px 10%;
-	min-height:115px;
+	min-height:122px;
 }
 
 #leftbar h4 {
@@ -152,7 +152,7 @@ a.telecharger_pdf_image img{
 
 #bloc_contact a{
     margin: 0 3% 0 0;
-	width:30%;
+/*	width:30%;*/
 }
 
 #attractivite .colright .nyroModal{display:none;}

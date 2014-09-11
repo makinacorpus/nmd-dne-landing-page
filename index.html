@@ -42,8 +42,9 @@
 							<h4>Votre contact</h4>
 							<address>{{dossier.assigned_user.first_name}} <strong>{{dossier.assigned_user.last_name}}</strong><br/>
 								<em>{{dossier.assigned_user.title}}</em>
-								<span><strong>Tél.</strong> : {{dossier.assigned_user.phone_work}}</span>
+								<span><a href="tel:{{dossier.assigned_user.phone_work}}" style="color: white;box-shadow: none;">{{dossier.assigned_user.phone_work}}</a></span>
 								<br/>
+								<span><a href="tel:{{dossier.assigned_user.phone_mobile}}" style="color: white;box-shadow: none;">{{dossier.assigned_user.phone_mobile}}</a></span>
 							</address>
 							<a ng-href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations ">
 								<img alt="Me contacter" src="images/landing/me-contacter.gif">
@@ -243,9 +244,9 @@
 					<h4>Votre contact</h4>
 					<address>{{dossier.assigned_user.first_name}} <strong>{{dossier.assigned_user.last_name}}</strong><br/>
 						<em>{{dossier.assigned_user.title}}</em>
-						<span><strong>Tél.</strong> : <a href="tel:{{dossier.assigned_user.phone_work}}" style="color: white;box-shadow: none;">{{dossier.assigned_user.phone_work}}</a></span>
+						<span><a href="tel:{{dossier.assigned_user.phone_work}}" style="color: white;box-shadow: none;">{{dossier.assigned_user.phone_work}}</a></span>
 						<br/>
-						<span><strong>Mob.</strong> : <a href="tel:{{dossier.assigned_user.phone_mobile}}" style="color: white;box-shadow: none;">{{dossier.assigned_user.phone_mobile}}</a></span>
+						<span><a href="tel:{{dossier.assigned_user.phone_mobile}}" style="color: white;box-shadow: none;">{{dossier.assigned_user.phone_mobile}}</a></span>
 						<br/>
 					</address>
 					<a href="mailto:{{dossier.assigned_user.email1}}?subject=RE%20:%20Demande%20d'informations ">
