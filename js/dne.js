@@ -74,11 +74,11 @@ angular.module('dne.controllers').controller('DNEController',
                 name: 'Nom d\' entreprise'
             },
             assigned_user: {
-                id: 'f23c9c46-461d-b014-f87e-4c52ebee0f86',
-                last_name: 'Gauvery',
-                first_name: 'Sandrine',
+                id: '',
+                last_name: 'Chargement du contact',
+                first_name: '',
                 title: 'Chargé(e)s de mission',
-                phone_work: '02 40 35 63 57'
+                phone_work: ''
             }
         };
         $scope.offres = [
@@ -117,9 +117,9 @@ angular.module('dne.controllers').controller('DNEController',
             var i;
             var getOffreIndex = function(offre){
                 if (offre.type === 'projects'){
-                    return parseInt(offre.source.mapLabel, 10);
+                    return 1 + parseInt(offre.source.mapLabel, 10);
                 }else if (offre.type === 'drawnFeatures'){
-                    return offre.source.properties.indexOffre;
+                    return 1+ offre.source.properties.indexOffre;
                 }
             };
             var offresDiffuses = JSON.parse(maps.drawnFeatures) || [];
