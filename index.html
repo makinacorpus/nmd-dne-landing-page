@@ -4,20 +4,16 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Nantes m&eacute;tropole | Votre dossier immobilier d'entreprise</title>	
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0," />
+
 		<link rel="shortcut icon" type="image/x-icon" href="http://www.nantes-developpement.com/favicon.ico" />
+
 		 <link href="css/styles.css" rel="stylesheet" type="text/css" media="screen" />
 
 		<link rel="stylesheet" media="screen and (min-width: 1px) and (max-width: 480px)" href="css/mobile-320-480.css" type="text/css" />
-		<link rel="stylesheet" media="screen and (min-width: 481px) and (max-width: 990px)" href="css/mobile-480-768.css" type="text/css" /> 
-				 
-		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
-		<script type="text/javascript" src="js/jquery.localScroll.min.js"></script>
-		<script type="text/javascript" src="js/jquery.scrollTo.min.js"></script>
-		<script type="text/javascript" src="js/jquery.rsv.js"></script>
-		
-		<script type="text/javascript" src="js/jquery.nyroModal.custom.js"></script>
-		<script type="text/javascript" src="js/main.js"></script>
-		
+		<link rel="stylesheet" media="screen and (min-width: 481px) and (max-width: 990px)" href="css/mobile-480-768.css" type="text/css" /> 		
+
+		<link rel="stylesheet" href="/embed/built.css" />
+
 	</head>	
 <body ng-controller="DNEController">
 	<div id="page">
@@ -79,8 +75,6 @@
 						<div class="inner">
 							<h2><strong>{{offres.length}} offres immobilières</strong> sélectionnées pour votre entreprise </h2>
 							<div id="map">
-								<iframe ng-src="{{mapURL}}" width="100%" height="480"></iframe>
-							<!-- IFRAME MAP -->
 							</div>
 							<div class="liste_offre">
 								<ol>
@@ -282,6 +276,16 @@
 	  })();
 
 	</script>
+
+	<script type="text/javascript" src="/embed/built.js"></script>
+
+	<script type="text/javascript" src="js/jquery.localScroll.min.js"></script>
+	<script type="text/javascript" src="js/jquery.scrollTo.min.js"></script>
+	<script type="text/javascript" src="js/jquery.rsv.js"></script>
+	
+	<script type="text/javascript" src="js/jquery.nyroModal.custom.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
 	<script type="text/javascript" src="js/dne.js"></script>
 </body>
