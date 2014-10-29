@@ -65,10 +65,10 @@ width:100%;
 #leftbar{
 	left: 0px;
 	position: absolute;
-	top: 0;
+	top: 595px;
 	width: 150px;
 	text-align:center;
-	padding-top:595px;
+	padding-top:0;
 }
 
 #leftbar .inner{
@@ -79,9 +79,9 @@ width:100%;
 	
 #rightbar{
 	width:150px;
-	padding-top:595px;
+	padding-top:0px;
 	position:absolute;
-	top:0px;
+	top:595px;
 	right:0px;
 }
 
