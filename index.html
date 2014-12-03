@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" ng-app="dne">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Nantes m&eacute;tropole | Votre dossier immobilier d'entreprise</title>	
+		<title>Nantes m&eacute;tropole | Votre dossier immobilier d'entreprise</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0," />
 
 		<link rel="shortcut icon" type="image/x-icon" href="http://www.nantes-developpement.com/favicon.ico" />
@@ -10,11 +10,12 @@
 		 <link href="css/styles.css" rel="stylesheet" type="text/css" media="screen" />
 
 		<link rel="stylesheet" media="screen and (min-width: 1px) and (max-width: 480px)" href="css/mobile-320-480.css" type="text/css" />
-		<link rel="stylesheet" media="screen and (min-width: 481px) and (max-width: 990px)" href="css/mobile-480-768.css" type="text/css" /> 		
+
+		<link rel="stylesheet" media="screen and (min-width: 481px) and (max-width: 990px)" href="css/mobile-480-768.css" type="text/css" />
 
 		<link rel="stylesheet" href="/embed/built.css" />
 
-	</head>	
+	</head>
 <body ng-controller="DNEController">
 	<div id="page">
 		<div id="wrapper">
@@ -23,7 +24,7 @@
 					<div id="header">
 						<h1 ng-show="!loaded">Chargement de votre dossier en cours ...</h1>
 						<h1 ng-show="loaded">{{dossier.account.name}}</h1>
-						<h2>votre dossier immobilier d’entreprise</h2>				
+						<h2>votre dossier immobilier d’entreprise</h2>
 					</div>
 					<div class="image_header"><img src="images/landing/votre-dossier-immobilier-d-entreprise.jpg" alt="votre dossier immobilier d’entreprise" /></div>
 					<div id="pdf_contact_header" class="mobile">
@@ -59,9 +60,9 @@
 							<li class="mobile demande_contact"><a ng-href="mailto:{{dossier.assigned_user.email1}}?subject=Demande%20d'informations" title="Demande de contact"><img alt="Demande de contact" src="images/landing/ico-contact-mel-mobile.gif"></a></li>
 							<li class="mobile telephone demande_contact"><a href="tel:{{dossier.assigned_user.phone_work}}"  title="Contactez nous par téléphone"><img alt="Contactez nous par téléphone" src="images/landing/ico-contact-tel-mobile.gif"></a></li>
 						</ul>
-						<div class="inner">						
+						<div class="inner">
 							<div ng-bind-html="sanitizeSugarCRMValue(dossier.description)"></div>
-						</div>					
+						</div>
 					</div>
 					<div id="propositions" class="motif">
 						<ul class="navigation">
@@ -79,7 +80,7 @@
 							<div class="liste_offre">
 								<ol>
 									<li ng-repeat="offre in offres">
-										<span class="chiffre">{{$index}}</span>
+										<span class="chiffre">{{ $index + 1 }}</span>
 										<strong>{{offre.label}}</strong>&nbsp;</li>
 								</ol>
 							</div>
@@ -120,7 +121,7 @@
 									<p>Ses services aux entreprises sont certifiés ISO 9001.</p>
 									<a href="htttp://www.nantes-developpement.com" title="">www.nantes-developpement.com</a>
 								</div>
-								
+
 								<hr class="clear" />
 							</div>
 							<div id="service" class="active onglet">
@@ -139,7 +140,7 @@
 											</ul>
 										</li>
 										<li>Fonctionnement de l’économie locale (réseaux et clubs d’entreprises, structures d’accompagnement et dispositifs d’aides...)</li>
-									</ul>								
+									</ul>
 								</div>
 								<div class="colright">
 									<strong>Recherche immobilière</strong><br/>
@@ -148,7 +149,7 @@
 										<li>Conseil sur le mode d’hébergement (bureau, centre d’affaires, local d’activité, pépinière, hôtel d’entreprises...)</li>
 										<li>Propositions immobilières avec l’aide de nos partenaires commercialisateurs</li>
 										<li>Visite guidée des sites identifiés sur la métropole nantaise</li>
-									</ul>							
+									</ul>
 								</div>
 								<hr class="clear">
 								<div class="colleft">
@@ -158,7 +159,7 @@
 										<li>Organisation de visites « découverte » de Nantes</li>
 										<li>Suivi individualisé des salariés et de leur famille</li>
 										<li>Aide à la recherche de l’emploi du conjoint</li>
-									</ul>										
+									</ul>
 								</div>
 								<div class="colright">
 									<strong>Intégration locale</strong>
@@ -167,12 +168,12 @@
 										<li>Appui à vos besoins en recrutement</li>
 										<li>Mise en relation avec les réseaux locaux</li>
 										<li>Participation à des événements et rencontres entre dirigeants</li>
-									</ul>								
+									</ul>
 								</div>
 								<hr class="clear">
 							</div>
 						</div>
-						<ul class="nav_footer">						
+						<ul class="nav_footer">
 							<li><a class="inactive" href="#service">Nos services</a></li>
 							<li class="active"><a href="#qui_sommes_nous" >Qui sommes-nous ?</a></li>
 						</ul>
@@ -196,7 +197,7 @@
 										<li>Une métropole de 600 000 habitants</li>
 										<li>5<sup>ème</sup> agglomération française par sa<br/>croissance démographique</li>
 										<li>100 000 habitants supplémentaires d’ici 2030</li>
-										<li>+ 60 000 emplois en 10 ans</li>										
+										<li>+ 60 000 emplois en 10 ans</li>
 									</ul>
 									<a href="http://www.nantes-developpement.com/emploi-formation/emploi-nantes/de-paris-a-nantes-des-dirigeants-temoignent" class="temoignage" title="Ils ont choisi Nantes et ils témoignent" onclick="window.open(this.href); return false;">Ils ont choisi Nantes et ils témoignent</a>
 									<a href="http://www.nantes-developpement.com/portlets/ressources/les-editions-realisees-par-nantes-metropole-developpement" title="En savoir plus sur l’économie Nantaise  " onclick="window.open(this.href); return false;">En savoir plus sur l’économie nantaise</a>
@@ -205,7 +206,7 @@
 										<li>Secteur d’activité</li>
 										<li>Grands projets</li>
 									</ul>
-									
+
 								</div>
 								<div class="colright">
 									<a href="http://youtu.be/gAd9E5vGNrQ" class="nyroModal" rel="gal">
@@ -220,7 +221,7 @@
 							</div>
 						</div>
 						<hr class="clear" />
-					</div>					
+					</div>
 				</div>
 			</div>
 			<div id="leftbar">
@@ -260,7 +261,7 @@
 		</div>
 		<div id="footer">
 			<a href="http://www.nantes-developpement.com" title="www.nantes-developpement.com" onclick="window.open(this.href); return false;">Nantes Métropole Développement</a> est un outil opérationnel au service des entreprises, créé et financé par la <a href="http://www.nantesmetropole.fr" title="www.nantesmetropole.fr" onclick="window.open(this.href); return false;">communauté urbaine	de Nantes</a>.<br /> Visiter notre site <a href="http://www.nantes-developpement.com" title="www.nantes-developpement.com" onclick="window.open(this.href); return false;">www.nantes-developpement.com</a> | <a href="http://www.nantes-developpement.com/formulaires/contactez-nous" title="Contacter Nantes M&eacute;tropole D&eacute;veloppement" onclick="window.open(this.href); return false;">Nous contacter</a>
-		</div>			
+		</div>
 	</div>
 
 	<script type="text/javascript">

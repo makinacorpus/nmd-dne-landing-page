@@ -47,7 +47,7 @@ Description: GregLudo
 	color:#40444d;
 	margin:0 auto 30px auto;
 	line-height:125%;
-	
+
 }
 
 .motif .inner h2 strong{
@@ -68,30 +68,36 @@ Description: GregLudo
 	background:#0d70bc;
 	margin-bottom:30px;
 }
+
+#propositions .inner .liste_offre{
+    max-height: 150px;
+}
+
 #propositions .inner .liste_offre ol{
 list-style:decimal outside none;
 
 font-size:1em;
 	z-index:1;
-		
+
 
 }
-	
+
 #propositions .inner .liste_offre ol li{
 position:relative;
-	color:#40444d;	
+	color:#40444d;
 background:#FFFFFF;
 padding:10px 2.3% 10px 7%;
 display:block;
-display:inline-block;
 margin:0;
 width:37%;
 margin-bottom:20px;
 font-family: Arial;
 }
 
-#propositions .inner .liste_offre ol li:nth-child(even){
-	margin-left:6%;
+#propositions .inner .liste_offre ol li:nth-child(n + 4){
+    position: relative;
+    bottom: 165px;
+    left: 300px;
 }
 
 #propositions .inner .liste_offre ol li span.chiffre{
@@ -111,7 +117,7 @@ font-family: Arial;
 #propositions .inner .liste_offre ol li span.chiffre:before{
 	width:0;
 	height:0;
-	
+
 }
 
 #propositions .inner #map .liste_offre ol li a{}
@@ -122,12 +128,12 @@ font-family: Arial;
 /* QUI_SOMMES_NOUS */
 
 #services .colleft{
-	
-	
+
+
 	}
 
-#services .colleft, 
-#services .colright {    
+#services .colleft,
+#services .colright {
     margin: 0;
 }
 #services #qui_sommes_nous .colright {
@@ -156,8 +162,8 @@ font-family: Arial;
 
 #qui_sommes_nous .colright a{color:#0d70bc;}
 
-#services #service .colleft, 
-#services #service .colright {    
+#services #service .colleft,
+#services #service .colright {
     margin: 0;
 	float:left;
 	width:40%;
@@ -224,7 +230,7 @@ font-family: Arial;
 	display:block;
 	padding-top:15px;
 	padding-bottom:20px;
-	
+
 }
 
 #attractivite .colright {
