@@ -69,10 +69,6 @@ Description: GregLudo
 	margin-bottom:30px;
 }
 
-#propositions .inner .liste_offre{
-    max-height: 150px;
-}
-
 #propositions .inner .liste_offre ol{
 list-style:decimal outside none;
 
@@ -83,21 +79,14 @@ font-size:1em;
 }
 
 #propositions .inner .liste_offre ol li{
-position:relative;
+	position:relative;
 	color:#40444d;
-background:#FFFFFF;
-padding:10px 2.3% 10px 7%;
-display:block;
-margin:0;
-width:37%;
-margin-bottom:20px;
-font-family: Arial;
-}
-
-#propositions .inner .liste_offre ol li:nth-child(n + 4){
-    position: relative;
-    bottom: 165px;
-    left: 300px;
+	background:#FFFFFF;
+	padding:10px 2.3% 10px 7%;
+	display:block;
+	margin:0;
+	margin-bottom:20px;
+	font-family: Arial;
 }
 
 #propositions .inner .liste_offre ol li span.chiffre{
@@ -111,7 +100,7 @@ font-family: Arial;
 	display:block;
 	position:absolute;
 	top:2px;
-	left:2%;
+	left:1%;
 }
 
 #propositions .inner .liste_offre ol li span.chiffre:before{
@@ -153,7 +142,7 @@ font-family: Arial;
 #services .colright ul{margin:15px 0px 0px 0px;}
 
 #services #qui_sommes_nous .colright ul li{
-	list-style:none inside;
+/*	list-style:none inside;*/
 	margin:10px 0px;
 }
 

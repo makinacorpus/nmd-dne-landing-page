@@ -160,18 +160,15 @@ a.telecharger_pdf_image img{
 
 
 #footer {
-	background: trnsparent url(../images/landing/bg-footer.gif) no-repeat center 30px;
-	padding-top: 205px;
-	width:690px;
-	margin:0;
+	margin: 20px;
+	width: 90%;
 	text-align: center;
 	font-size: 11px;
-	color: #a5a9ac;
+	color: #555;
 	height: 35px;
-	font-size:11px;
 }
 
 #footer a {
-    color: #A5A9AC;
+    color: #0d70bc;
 	font-weight:normal;
 }

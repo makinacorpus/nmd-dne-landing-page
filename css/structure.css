@@ -86,18 +86,15 @@ width:100%;
 }
 
 #footer {
-	background: transparent url(../images/landing/bg-footer.gif) no-repeat center 30px;
-	padding-top: 205px;
-	width:690px;
-	margin:0 150px 0 150px;
+	width: 660px;
+	margin: 20px 150px 0 160px;
 	text-align: center;
 	font-size: 11px;
-	color: #a5a9ac;
+	color: #555;
 	height: 35px;
-	font-size:11px;
 }
 
 #footer a {
-    color: #A5A9AC;
+    color: #0d70bc;
 	font-weight:normal;
 }

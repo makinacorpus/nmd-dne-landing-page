@@ -2,7 +2,7 @@
  * nyroModal v2.0.0
  * Core
  *
- * Commit a771d6237dc7c3a278f6 (05/07/2011) * 
+ * Commit b7ae3accf7634cc79a24dc3c6024cbb1f614b462 (10/17/2014) * 
  * 
  * Included parts:
  * - anims.fade
@@ -18,6 +18,7 @@
  * - filters.iframe
  * - filters.iframeForm
  * - filters.embedly
+ * - filters.youtube
  */
 /*
  * nyroModal v2.0.0
@@ -25,6 +26,35 @@
  *
  */
 jQuery(function($, undefined) {
+
+	var uaMatch = function(ua) {
+		ua = ua.toLowerCase();
+		var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
+			/(webkit)[ \/]([\w.]+)/.exec( ua ) ||
+			/(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
+			/(msie) ([\w.]+)/.exec( ua ) ||
+			ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
+			[];
+
+		return {
+			browser: match[ 1 ] || "",
+			version: match[ 2 ] || "0"
+		};
+	},
+	matched = uaMatch(navigator.userAgent),
+	browser = {};
+
+	if (matched.browser) {
+		browser[matched.browser] = true;
+		browser.version = matched.version;
+	}
+
+	// Chrome is Webkit, but Webkit is also Safari.
+	if (browser.chrome) {
+		browser.webkit = true;
+	} else if (browser.webkit) {
+		browser.safari = true;
+	}
 
 	var $w = $(window),
 		$d = $(document),
@@ -34,8 +64,10 @@ jQuery(function($, undefined) {
 		_nmObj = {
 			filters: [],	// List of filters used
 			callbacks: {},	// Sepcific callbacks
+			anims: {},	// Sepcific animations functions
 			loadFilter: undefined,	// Name of the filter used for loading
 
+			enabled: true, // Indicates if it's enabled or not
 			modal: false,	// Indicates if it's a modal window or not
 			closeOnEscape: true,	// Indicates if the modal should close on Escape key
 			closeOnClick: true,	// Indicates if a click on the background should close the modal
@@ -55,8 +87,14 @@ jQuery(function($, undefined) {
 			galleryCounts: true,	// Indicates if the gallery counts should be shown
 			ltr: true, // Left to Right by default. Put to false for Hebrew or Right to Left language. Used in gallery filter
 
+			// Specific confirguation for DOM filter
+			domCopy: false, // Indicates if DOM element should be copied or moved
+			
+			// Specific confirguation for link and form filters
+			ajax: {}, // Ajax options to be used in link and form filter
+			
 			// Specific confirguation for image filter
-			imageRegex: '[^\.]\.(jpg|jpeg|png|tiff|gif|bmp)\s*$',	// Regex used to detect image link
+			imageRegex: '[^\.]\.(jpg|jpeg|png|tiff|gif|bmp)\\s*$',	// Regex used to detect image link
 
 			selIndicator: 'nyroModalSel', // Value added when a form or Ajax is sent with a filter content
 
@@ -83,6 +121,8 @@ jQuery(function($, undefined) {
 				h: undefined,		// height
 				minW: undefined,	// minimum Width
 				minH: undefined,	// minimum height
+				maxW: undefined,	// maximum width
+				maxH: undefined,	// maximum height
 				wMargin: undefined,	// Horizontal margin
 				hMargin: undefined	// Vertical margin
 			},
@@ -105,6 +145,7 @@ jQuery(function($, undefined) {
 			_loading: false,	// Indicates if the loading is shown
 			_animated: false,	// Indicates if the modal is currently animated
 			_transition: false,	//Indicates if the modal is in transition
+			_needClose: false, // Indicates if the modal should close after current animation
 			_nmOpener: undefined,	// nmObj of the modal that opened the current one in non stacking mode
 			_nbContentLoading: 0,	// Counter for contentLoading call
 			_scripts: '',	// Scripts tags to be included
@@ -116,6 +157,8 @@ jQuery(function($, undefined) {
 			},
 			// Open the modal
 			open: function() {
+				if (!this.enabled)
+					return false;
 				if (this._nmOpener)
 					this._nmOpener._close();
 				this.getInternal()._pushStack(this.opener);
@@ -167,6 +210,12 @@ jQuery(function($, undefined) {
 			size: function() {
 				var maxHeight = this.getInternal().fullSize.viewH - this.sizes.hMargin,
 					maxWidth = this.getInternal().fullSize.viewW - this.sizes.wMargin;
+				
+				if (typeof this.sizes.maxH !== 'undefined' && this.sizes.maxH < maxHeight) 
+					maxHeight = this.sizes.maxH;
+				if (typeof this.sizes.maxW !== 'undefined' && this.sizes.maxW < maxWidth) 
+					maxWidth = this.sizes.maxW;
+				
 				if (this.sizes.minW && this.sizes.minW > this.sizes.w)
 					this.sizes.w = this.sizes.minW;
 				if (this.sizes.minH && this.sizes.minH > this.sizes.h)
@@ -218,30 +267,54 @@ jQuery(function($, undefined) {
 			// Internal function for closing a nyroModal
 			// Will call 'close' callback filter
 			_close: function() {
-				this.getInternal()._removeStack(this.opener);
-				this._opened = false;
-				this._open = false;
-				this._callFilters('close');
+				var ret = true;
+				if (!this._animated) {
+					$.each(this._callFilters('close'), function(k, v) {
+						if (v === false)
+							ret = false;
+					});
+					if (ret) {
+						this.getInternal()._removeStack(this.opener);
+						this._opened = false;
+						this._open = false;
+					}
+				} else {
+					this._needClose = true;
+					ret = false;
+				}
+				return ret;
 			},
 			// Public function for closing a nyroModal
 			close: function() {
-				this._close();
-				this._callFilters('beforeClose');
-				var self = this;
-				this._unreposition();
-				self._callAnim('hideCont', function() {
-					self._callAnim('hideLoad', function() {
-						self._callAnim('hideBg', function() {
-							self._callFilters('afterClose');
-							self.elts.cont.remove();
-							self.elts.hidden.remove();
-							self.elts.load.remove();
-							self.elts.bg.remove();
-							self.elts.all.remove();
-							self.elts.cont = self.elts.hidden = self.elts.load = self.elts.bg = self.elts.all = undefined;
+				if (this._close()) {
+					this._needClose = false;
+					this._callFilters('beforeClose');
+					var self = this;
+					this._unreposition();
+					self._callAnim('hideCont', function() {
+						self._callAnim('hideLoad', function() {
+							self._callAnim('hideBg', function() {
+								self._callFilters('afterClose');
+								self.elts.cont.remove();
+								self.elts.hidden.remove();
+								self.elts.load.remove();
+								self.elts.bg.remove();
+								self.elts.all.remove();
+								self.elts.cont = self.elts.hidden = self.elts.load = self.elts.bg = self.elts.all = undefined;
+							});
 						});
 					});
-				});
+				}
+			},
+			
+			// Public function for destroying a nyroModal instance, only for non open modal
+			destroy: function() {
+				if (this._open)
+					return false;
+				this._callFilters('destroy');
+				if (this.elts.all)
+					this.elts.all.remove();
+				return true;
 			},
 
 			// Init HTML elements
@@ -266,8 +339,8 @@ jQuery(function($, undefined) {
 
 			// Trigger the error
 			// Will call 'error' callback filter
-			_error: function() {
-				this._callFilters('error');
+			_error: function(jqXHR) {
+				this._callFilters('error', jqXHR);
 			},
 
 			// Set the HTML content to show.
@@ -289,7 +362,7 @@ jQuery(function($, undefined) {
 					var cur = $('<div>'+html+'</div>').find(selector);
 					if (cur.length) {
 						html = cur.html()
-							.replace(/<pre class="?nyroModalScript"? rel="?(.?)"?><\/pre>/gi, function(x, y, z) { return tmp[y]; })
+							.replace(/<pre class="?nyroModalScript"? rel="?([0-9]*)"?><\/pre>/gi, function(x, y, z) { return tmp[y]; })
 							.replace(/nyroModalLN/gi, "\r\n");
 					} else {
 						// selector not found
@@ -301,7 +374,7 @@ jQuery(function($, undefined) {
 					.append(this._filterScripts(html))
 					.prepend(this.header)
 					.append(this.footer)
-					.wrapInner('<div class="nyroModal'+ucfirst(this.loadFilter)+'" />');
+					.wrapInner($('<div />', {'class': 'nyroModal'+$.ucfirst(this.loadFilter)}));
 
 				// Store the size of the element
 				this.sizes.initW = this.sizes.w = this.elts.hidden.width();
@@ -368,26 +441,33 @@ jQuery(function($, undefined) {
 
 			// Call a function against all active filters
 			// - fct: Function name
+			// - prm: Parameter to be used in callback
 			// return an array of all return of callbacks; keys are filters name
-			_callFilters: function(fct) {
-				this.getInternal()._debug(fct);
+			_callFilters: function(fct, prm) {
+				this.getInternal()._debug(fct, prm);
+				if (this.opener && this.opener.length) {
+					this.opener.trigger(fct+'.nyroModal', [this, prm]);
+				} else {
+					$b.trigger(fct+'.nyroModal', [this, prm]);
+				}
 				var ret = [],
 					self = this;
 				$.each(this.filters, function(i, f) {
-					ret[f] = self._callFilter(f, fct);
+					ret[f] = self._callFilter(f, fct, prm);
 				});
 				if (this.callbacks[fct] && $.isFunction(this.callbacks[fct]))
-					this.callbacks[fct](this);
+					ret['callbacks'] = this.callbacks[fct](this, prm);
 				return ret;
 			},
 
 			// Call a filter function for a specific filter
 			// - f: Filter name
 			// - fct: Function name
+			// - prm: Parameter to be used in callback
 			// return the return of the callback
-			_callFilter: function(f, fct) {
+			_callFilter: function(f, fct, prm) {
 				if (_filters[f] && _filters[f][fct] && $.isFunction(_filters[f][fct]))
-					return _filters[f][fct](this);
+					return _filters[f][fct](this, prm);
 				return undefined;
 			},
 
@@ -396,18 +476,25 @@ jQuery(function($, undefined) {
 			// - fct: Animation function name
 			// - clb: Callback once the animation is done
 			_callAnim: function(fct, clb) {
-				this.getInternal()._debug(fct);
-				this._callFilters('before'+ucfirst(fct));
+				this.getInternal()._debug(fct, clb);
+				this._callFilters('before'+$.ucfirst(fct));
 				if (!this._animated) {
 					this._animated = true;
 					if (!$.isFunction(clb)) clb = $.noop;
-					var set = this.anim[fct] || this.anim.def || 'basic';
-					if (!_animations[set] || !_animations[set][fct] || !$.isFunction(_animations[set][fct]))
-						set = 'basic';
-					_animations[set][fct](this, $.proxy(function() {
+					if (this.anims[fct] && $.isFunction(this.anims[fct])) {
+						curFct = this.anims[fct];
+					} else {
+						var set = this.anim[fct] || this.anim.def || 'basic';
+						if (!_animations[set] || !_animations[set][fct] || !$.isFunction(_animations[set][fct]))
+							set = 'basic';
+						curFct = _animations[set][fct];
+					}
+					curFct(this, $.proxy(function() {
 							this._animated = false;
-							this._callFilters('after'+ucfirst(fct));
+							this._callFilters('after'+$.ucfirst(fct));
 							clb();
+							if (this._needClose)
+								setTimeout($.proxy(function() {this.close();}, this), 50);
 						}, this));
 				}
 			},
@@ -440,6 +527,7 @@ jQuery(function($, undefined) {
 										this._callFilters('afterShowCont');
 										this.elts.cont.append(this._scriptsShown);
 										this._reposition();
+										this.elts.cont.scrollTop(0);
 									}, this));
 								}, this);
 								if (this._nbContentLoading == 1) {
@@ -454,6 +542,7 @@ jQuery(function($, undefined) {
 									this._callAnim('showCont', $.proxy(function() {
 										this.elts.cont.append(this._scriptsShown);
 										this._reposition();
+										this.elts.cont.scrollTop(0);
 									}, this));
 								}, this));
 							}
@@ -543,7 +632,7 @@ jQuery(function($, undefined) {
 				if (_internal.firstInit) {
 					_internal._container = $('<div />').appendTo($b);
 					$w.smartresize($.proxy(_internal._resize, _internal));
-					$d.bind('keydown.nyroModal', $.proxy(_internal._keyHandler, _internal));
+					$d.on('keydown.nyroModal', $.proxy(_internal._keyHandler, _internal));
 					_internal._calculateFullSize();
 					_internal.firstInit = false;
 				}
@@ -563,12 +652,21 @@ jQuery(function($, undefined) {
 								: $.extend(true, {opener: me}, _nmObj, opts));
 				});
 			},
+			nmDestroy: function() {
+				return this.each(function() {
+					var me = $(this);
+					if (me.data('nmObj')) {
+						if (me.data('nmObj').destroy())
+							me.removeData('nmObj');
+					}
+				});
+			},
 			nmCall: function() {
 				return this.trigger('nyroModal');
 			},
 
 			nmManual: function(url, opts) {
-				$('<a href="'+url+'"></a>').nyroModal(opts).trigger('nyroModal');
+				$('<a />', {href: url}).nyroModal(opts).trigger('nyroModal');
 			},
 			nmData: function(data, opts) {
 				this.nmManual('#', $.extend({data: data}, opts));
@@ -591,9 +689,9 @@ jQuery(function($, undefined) {
 				return undefined;
 			},
 
-			_debug: function(msg) {
+			_debug: function() {
 				if (this.debug && window.console && window.console.log)
-					window.console.log(msg);
+					window.console.log.apply(window.console, arguments);
 			},
 
 			_container: undefined,
@@ -608,33 +706,15 @@ jQuery(function($, undefined) {
 				nm._callFilters('initFilters');
 				nm._callFilters('init');
 				nm.opener
-					.unbind('nyroModal.nyroModal nmClose.nyroModal nmResize.nyroModal')
-					.bind({
-						'nyroModal.nyroModal': 	function(e) { nm.open(); return false;},
+					.off('nyroModal.nyroModal nmDisable.nyroModal nmEnable.nyroModal nmClose.nyroModal nmResize.nyroModal')
+					.on({
+						'nyroModal.nyroModal': 	function() { nm.open(); return false;},
+						'nmDisable.nyroModal': 	function() { nm.enabled = false; return false;},
+						'nmEnable.nyroModal': 	function() { nm.enabled = true; return false;},
 						'nmClose.nyroModal': 	function() { nm.close(); return false;},
 						'nmResize.nyroModal': 	function() { nm.resize(); return false;}
 					});
 			},
-
-			_scrollWidth: (function() {
-				var scrollbarWidth;
-				// if (jQuery.browser.msie) {
-				// 	var $textarea1 = $('<textarea cols="10" rows="2"></textarea>')
-				// 			.css({ position: 'absolute', top: -1000, left: -1000 }).appendTo($b),
-				// 		$textarea2 = $('<textarea cols="10" rows="2" style="overflow: hidden;"></textarea>')
-				// 			.css({ position: 'absolute', top: -1000, left: -1000 }).appendTo($b);
-				// 	scrollbarWidth = $textarea1.width() - $textarea2.width();
-				// 	$textarea1.add($textarea2).remove();
-				// } else {
-					var $div = $('<div />')
-						.css({ width: 100, height: 100, overflow: 'auto', position: 'absolute', top: -1000, left: -1000 })
-						.prependTo($b).append('<div />').find('div')
-							.css({ width: '100%', height: 200 });
-					scrollbarWidth = 100 - $div.width();
-					$div.parent().remove();
-				//}
-				return scrollbarWidth;
-			})(),
 
 			_selNyroModal: function(obj) {
 				return $(obj).data('nmObj') ? true : false;
@@ -668,11 +748,13 @@ jQuery(function($, undefined) {
 				});
 			},
 			_resize: function() {
-				var opens = $(':nmOpen').each(function() {
-					$(this).data('nmObj')._unreposition();
+				$.each(this.stack, function(k, v) {
+					v.nmObj._unreposition();
 				});
 				this._calculateFullSize();
-				opens.trigger('nmResize');
+				$.each(this.stack, function(k, v) {
+					v.nmObj.resize();
+				});
 			},
 			_calculateFullSize: function() {
 				this.fullSize = {
@@ -685,7 +767,7 @@ jQuery(function($, undefined) {
 				this.fullSize.viewH = Math.min(this.fullSize.h, this.fullSize.wH);
 			},
 			_getCurCSS: function(elm, name) {
-				var ret = parseInt($.curCSS(elm, name, true));
+				var ret = parseInt($.css(elm, name, true));
 				return isNaN(ret) ? 0 : ret;
 			},
 			_getOuter: function(elm) {
@@ -716,7 +798,7 @@ jQuery(function($, undefined) {
 			},
 			_getSpaceReposition: function() {
 				var	outer = this._getOuter($b),
-					ie7 = $.browser.msie && $.browser.version < 8 && !(screen.height <= $w.height()+23);
+					ie7 = browser.msie && browser.version < 8 && !(screen.height <= $w.height()+23);
 				return {
 					top: $w.scrollTop() - (!ie7 ? outer.h.border / 2 : 0),
 					left: $w.scrollLeft() - (!ie7 ? outer.w.border / 2 : 0)
@@ -811,11 +893,6 @@ jQuery(function($, undefined) {
 				},
 				initElts: function(nm) {
 					nm.elts.bg.addClass('nyroModalBg');
-					if (nm.closeOnClick)
-						nm.elts.bg.unbind('click.nyroModal').bind('click.nyroModal', function(e) {
-							e.preventDefault();
-							nm.close();
-						});
 					nm.elts.cont.addClass('nyroModalCont');
 					nm.elts.hidden.addClass('nyroModalCont nyroModalHidden');
 					nm.elts.load.addClass('nyroModalCont nyroModalLoad');
@@ -831,7 +908,14 @@ jQuery(function($, undefined) {
 							var cur = $(this);
 							cur.nyroModal(nm.getForNewLinks(cur), true);
 						}).end()
-						.find('.nyroModalClose').bind('click.nyroModal', function(e) {
+						.find('.nyroModalClose').on('click.nyroModal', function(e) {
+							e.preventDefault();
+							nm.close();
+						});
+				},
+				afterShowCont: function(nm) {
+					if (nm.closeOnClick)
+						nm.elts.bg.off('click.nyroModal').on('click.nyroModal', function(e) {
 							e.preventDefault();
 							nm.close();
 						});
@@ -857,6 +941,7 @@ jQuery(function($, undefined) {
 		nm: _internal.nyroModal,
 		nyroModal: _internal.nyroModal,
 		nmInit: _internal.nmInit,
+		nmDestroy: _internal.nmDestroy,
 		nmCall: _internal.nmCall
 	});
 
@@ -901,21 +986,26 @@ jQuery(function($, undefined) {
       };
   };
 	// smartresize
-	jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
+	jQuery.fn[sr] = function(fn){  return fn ? this.on('resize', debounce(fn)) : this.trigger(sr); };
 
 })(jQuery,'smartresize');
+
 // ucFirst
-function ucfirst(str) {
-    // http://kevin.vanzonneveld.net
-    // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // +   bugfixed by: Onno Marsman
-    // +   improved by: Brett Zamir (http://brett-zamir.me)
-    // *     example 1: ucfirst('kevin van zonneveld');
-    // *     returns 1: 'Kevin van zonneveld'
-    str += '';
-    var f = str.charAt(0).toUpperCase();
-    return f + str.substr(1);
-}
+// jquery plugin by: Baris Aydinoglu (http://baris.aydinoglu.info)
+(function($) {
+	$.ucfirst = function(str) {
+		// http://kevin.vanzonneveld.net
+		// +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// +   bugfixed by: Onno Marsman
+		// +   improved by: Brett Zamir (http://brett-zamir.me)
+		// *     example 1: ucfirst('kevin van zonneveld');
+		// *     returns 1: 'Kevin van zonneveld'
+		str+= '';
+		var f = str.charAt(0).toUpperCase();
+		return f + str.substr(1);
+	};
+})(jQuery);
+
 /*
  * nyroModal v2.0.0
  * 
@@ -1086,7 +1176,7 @@ jQuery(function($, undefined) {
 							href: '#'
 						})
 						.addClass('nyroModalPrev')
-						.bind('click', function(e) {
+						.on('click', function(e) {
 							e.preventDefault();
 							nm._callFilters('galleryPrev');
 						})
@@ -1099,7 +1189,7 @@ jQuery(function($, undefined) {
 							href: '#'
 						})
 						.addClass('nyroModalNext')
-						.bind('click', function(e) {
+						.on('click', function(e) {
 							e.preventDefault();
 							nm._callFilters('galleryNext');
 						})
@@ -1157,22 +1247,25 @@ jQuery(function($, undefined) {
 			},
 			init: function(nm) {
 				nm.loadFilter = 'link';
-				nm.opener.unbind('click.nyroModal').bind('click.nyroModal', function(e) {
+				nm.opener.off('click.nyroModal').on('click.nyroModal', function(e) {
 					e.preventDefault();
 					nm.opener.trigger('nyroModal');
 				});
 			},
 			load: function(nm) {
-				$.ajax({
+				$.ajax($.extend(true, {}, nm.ajax || {}, {
 					url: nm.store.link.url,
 					data: nm.store.link.sel ? [{name: nm.selIndicator, value: nm.store.link.sel.substring(1)}] : undefined,
 					success: function(data) {
 						nm._setCont(data, nm.store.link.sel);
 					},
-					error: function() {
-						nm._error();
+					error: function(jqXHR) {
+						nm._error(jqXHR);
 					}
-				});
+				}));
+			},
+			destroy: function(nm) {
+				nm.opener.off('click.nyroModal');
 			}
 		}
 	});
@@ -1199,12 +1292,12 @@ jQuery(function($, undefined) {
 			load: function(nm) {
 				nm.store.domEl = $(nm.store.link.sel);
 				if (nm.store.domEl.length)
-					nm._setCont(nm.store.domEl.contents());
+					nm._setCont(nm.domCopy ? nm.store.domEl.html() : nm.store.domEl.contents());
 				else
 					nm._error();
 			},
 			close: function(nm) {
-				if (nm.store.domEl && nm.elts.cont)
+				if (!nm.domCopy && nm.store.domEl && nm.elts.cont)
 					nm.store.domEl.append(nm.elts.cont.find('.nyroModalDom').contents());
 			}
 		}
@@ -1225,9 +1318,8 @@ jQuery(function($, undefined) {
 		data: {
 			is: function(nm) {
 				var ret = nm.data ? true : false;
-				if (ret) {
+				if (ret)
 					nm._delFilter('dom');
-				}
 				return ret;
 			},
 			init: function(nm) {
@@ -1347,7 +1439,7 @@ jQuery(function($, undefined) {
 			},
 			init: function(nm) {
 				nm.loadFilter = 'form';
-				nm.opener.unbind('submit.nyroModal').bind('submit.nyroModal', function(e) {
+				nm.opener.off('submit.nyroModal').on('submit.nyroModal', function(e) {
 					e.preventDefault();
 					nm.opener.trigger('nyroModal');
 				});
@@ -1356,17 +1448,20 @@ jQuery(function($, undefined) {
 				var data = nm.opener.serializeArray();
 				if (nm.store.form.sel)
 					data.push({name: nm.selIndicator, value: nm.store.form.sel.substring(1)});
-				$.ajax({
+				$.ajax($.extend(true, { type : 'get', dataType : 'text' }, nm.ajax || {}, {
 					url: nm.store.form.url,
 					data: data,
-					type: nm.opener.attr('method') ? nm.opener.attr('method') : 'get',
+					type: nm.opener.attr('method') ? nm.opener.attr('method') : undefined,
 					success: function(data) {
 						nm._setCont(data, nm.store.form.sel);
 					},
-					error: function() {
-						nm._error();
+					error: function(jqXHR) {
+						nm._error(jqXHR);
 					}
-				});
+				}));
+			},
+			destroy: function(nm) {
+				nm.opener.off('submit.nyroModal');
 			}
 		}
 	});
@@ -1395,7 +1490,7 @@ jQuery(function($, undefined) {
 			init: function(nm) {
 				nm.loadFilter = 'formFile';
 				nm.store.formFileLoading = false;
-				nm.opener.unbind('submit.nyroModal').bind('submit.nyroModal', function(e) {
+				nm.opener.off('submit.nyroModal').on('submit.nyroModal', function(e) {
 					if (!nm.store.formFileIframe) {
 						e.preventDefault();
 						nm.opener.trigger('nyroModal');
@@ -1407,8 +1502,7 @@ jQuery(function($, undefined) {
 			initElts: function(nm) {
 				var inputSel;
 				if (nm.store.form.sel)
-					inputSel = $('<input />', {
-						'type': 'hidden',
+					inputSel = $('<input type="hidden" />', {
 						name: nm.selIndicator,
 						value: nm.store.form.sel.substring(1)
 					}).appendTo(nm.opener);
@@ -1422,24 +1516,30 @@ jQuery(function($, undefined) {
 					nm.store.formFileIframe = undefined;
 					delete(nm.store.formFileIframe);
 				}
-				nm.store.formFileIframe = $('<iframe name="nyroModalFormFile" src="javascript:\'\';" id="nyromodal-iframe-'+(new Date().getTime())+'"></iframe>')
+				nm.store.formFileIframe = $('<iframe />')
+					.attr({
+						name: 'nyroModalFormFile',
+						src: 'javascript:\'\';',
+						id: 'nyromodal-iframe-'+(new Date().getTime()),
+						frameborder: '0'
+					})
 					.hide()
 					.load(function() {
 						if (nm.store.formFileLoading) {
 							nm.store.formFileLoading = false;
 							var content = nm.store.formFileIframe
-									.unbind('load error')
+									.off('load error')
 									.contents().find('body').not('script[src]');
 							if (content && content.html() && content.html().length) {
 								rmFormFileElts();
 								nm._setCont(content.html(), nm.store.form.sel);
 							} else {
 								// Not totally ready, try it in a few secs
-								var nbTry = 0;
+								var nbTry = 0,
 									fct = function() {
 										nbTry++;
 										var content = nm.store.formFileIframe
-												.unbind('load error')
+												.off('load error')
 												.contents().find('body').not('script[src]');
 										if (content && content.html() && content.html().length) {
 											nm._setCont(content.html(), nm.store.form.sel);
@@ -1455,7 +1555,7 @@ jQuery(function($, undefined) {
 							}
 						}
 					})
-					.error(function() {
+					.on('error', function() {
 						rmFormFileElts();
 						nm._error();
 					});
@@ -1471,6 +1571,9 @@ jQuery(function($, undefined) {
 					nm.store.formFileIframe = undefined;
 					delete(nm.store.formFileIframe);
 				}
+			},
+			destroy: function(nm) {
+				nm.opener.off('submit.nyroModal')
 			}
 		}
 	});
@@ -1500,7 +1603,12 @@ jQuery(function($, undefined) {
 				nm.loadFilter = 'iframe';
 			},
 			load: function(nm) {
-				nm.store.iframe = $('<iframe src="javascript:\'\';" id="nyromodal-iframe-'+(new Date().getTime())+'"></iframe>');
+				nm.store.iframe = $('<iframe />')
+					.attr({
+						src: 'javascript:\'\';',
+						id: 'nyromodal-iframe-'+(new Date().getTime()),
+						frameborder: '0'
+					});
 				nm._setCont(nm.store.iframe);
 			},
 			afterShowCont: function(nm) {
@@ -1541,7 +1649,7 @@ jQuery(function($, undefined) {
 				nm.loadFilter = 'iframeForm';
 				nm.store.iframeFormLoading = false;
 				nm.store.iframeFormOrgTarget = nm.opener.attr('target');
-				nm.opener.unbind('submit.nyroModal').bind('submit.nyroModal', function(e) {
+				nm.opener.off('submit.nyroModal').on('submit.nyroModal', function(e) {
 					if (!nm.store.iframeFormIframe) {
 						e.preventDefault();
 						nm.opener.trigger('nyroModal');
@@ -1551,7 +1659,13 @@ jQuery(function($, undefined) {
 				});
 			},
 			load: function(nm) {
-				nm.store.iframeFormIframe = $('<iframe name="nyroModalIframeForm" src="javascript:\'\';" id="nyromodal-iframe-'+(new Date().getTime())+'"></iframe>');
+				nm.store.iframeFormIframe = $('<iframe />')
+					.attr({
+						name: 'nyroModalIframeForm',
+						src: 'javascript:\'\';',
+						id: 'nyromodal-iframe-'+(new Date().getTime()),
+						frameborder: '0'
+					});
 				nm._setCont(nm.store.iframeFormIframe);
 			},
 			afterShowCont: function(nm) {
@@ -1568,6 +1682,9 @@ jQuery(function($, undefined) {
 					nm.store.iframeFormIframe = undefined;
 					delete(nm.store.iframeFormIframe);
 				}
+			},
+			destroy: function(nm) {
+				nm.opener.off('submit.nyroModal')
 			}
 		}
 	});
@@ -1583,51 +1700,125 @@ jQuery(function($, undefined) {
  * Before: filters.iframeForm
  */
 jQuery(function($, undefined) {
+	$.nmObj({
+		embedlyUrl: 'http://api.embed.ly/1/oembed',
+		embedly: {
+			key: undefined,
+			wmode: 'transparent',
+			allowscripts: true,
+			format: 'json'
+			
+			/*
+			maxwidth: 400,
+			maxheight: 400,
+			width: 400,
+			nostyle: false,
+			autoplay: false,
+			videosrc: false,
+			words: 50,
+			chars: 100
+			*/
+		}
+	});
+	var cache = [];
 	$.nmFilters({
 		embedly: {
 			is: function(nm) {
-				// Regex from https://github.com/embedly/embedly-jquery
-				var embedlyReg = /http:\/\/(.*youtube\.com\/watch.*|.*\.youtube\.com\/v\/.*|youtu\.be\/.*|.*\.youtube\.com\/user\/.*|.*\.youtube\.com\/.*#.*\/.*|m\.youtube\.com\/watch.*|m\.youtube\.com\/index.*|.*\.youtube\.com\/profile.*|.*justin\.tv\/.*|.*justin\.tv\/.*\/b\/.*|.*justin\.tv\/.*\/w\/.*|www\.ustream\.tv\/recorded\/.*|www\.ustream\.tv\/channel\/.*|www\.ustream\.tv\/.*|qik\.com\/video\/.*|qik\.com\/.*|qik\.ly\/.*|.*revision3\.com\/.*|.*\.dailymotion\.com\/video\/.*|.*\.dailymotion\.com\/.*\/video\/.*|www\.collegehumor\.com\/video:.*|.*twitvid\.com\/.*|www\.break\.com\/.*\/.*|vids\.myspace\.com\/index\.cfm\?fuseaction=vids\.individual&videoid.*|www\.myspace\.com\/index\.cfm\?fuseaction=.*&videoid.*|www\.metacafe\.com\/watch\/.*|www\.metacafe\.com\/w\/.*|blip\.tv\/file\/.*|.*\.blip\.tv\/file\/.*|video\.google\.com\/videoplay\?.*|.*revver\.com\/video\/.*|video\.yahoo\.com\/watch\/.*\/.*|video\.yahoo\.com\/network\/.*|.*viddler\.com\/explore\/.*\/videos\/.*|liveleak\.com\/view\?.*|www\.liveleak\.com\/view\?.*|animoto\.com\/play\/.*|dotsub\.com\/view\/.*|www\.overstream\.net\/view\.php\?oid=.*|www\.livestream\.com\/.*|www\.worldstarhiphop\.com\/videos\/video.*\.php\?v=.*|worldstarhiphop\.com\/videos\/video.*\.php\?v=.*|teachertube\.com\/viewVideo\.php.*|www\.teachertube\.com\/viewVideo\.php.*|www1\.teachertube\.com\/viewVideo\.php.*|www2\.teachertube\.com\/viewVideo\.php.*|bambuser\.com\/v\/.*|bambuser\.com\/channel\/.*|bambuser\.com\/channel\/.*\/broadcast\/.*|www\.schooltube\.com\/video\/.*\/.*|bigthink\.com\/ideas\/.*|bigthink\.com\/series\/.*|sendables\.jibjab\.com\/view\/.*|sendables\.jibjab\.com\/originals\/.*|www\.xtranormal\.com\/watch\/.*|socialcam\.com\/v\/.*|www\.socialcam\.com\/v\/.*|dipdive\.com\/media\/.*|dipdive\.com\/member\/.*\/media\/.*|dipdive\.com\/v\/.*|.*\.dipdive\.com\/media\/.*|.*\.dipdive\.com\/v\/.*|v\.youku\.com\/v_show\/.*\.html|v\.youku\.com\/v_playlist\/.*\.html|www\.snotr\.com\/video\/.*|snotr\.com\/video\/.*|video\.jardenberg\.se\/.*|.*yfrog\..*\/.*|tweetphoto\.com\/.*|www\.flickr\.com\/photos\/.*|flic\.kr\/.*|twitpic\.com\/.*|www\.twitpic\.com\/.*|twitpic\.com\/photos\/.*|www\.twitpic\.com\/photos\/.*|.*imgur\.com\/.*|.*\.posterous\.com\/.*|post\.ly\/.*|twitgoo\.com\/.*|i.*\.photobucket\.com\/albums\/.*|s.*\.photobucket\.com\/albums\/.*|phodroid\.com\/.*\/.*\/.*|www\.mobypicture\.com\/user\/.*\/view\/.*|moby\.to\/.*|xkcd\.com\/.*|www\.xkcd\.com\/.*|imgs\.xkcd\.com\/.*|www\.asofterworld\.com\/index\.php\?id=.*|www\.asofterworld\.com\/.*\.jpg|asofterworld\.com\/.*\.jpg|www\.qwantz\.com\/index\.php\?comic=.*|23hq\.com\/.*\/photo\/.*|www\.23hq\.com\/.*\/photo\/.*|.*dribbble\.com\/shots\/.*|drbl\.in\/.*|.*\.smugmug\.com\/.*|.*\.smugmug\.com\/.*#.*|emberapp\.com\/.*\/images\/.*|emberapp\.com\/.*\/images\/.*\/sizes\/.*|emberapp\.com\/.*\/collections\/.*\/.*|emberapp\.com\/.*\/categories\/.*\/.*\/.*|embr\.it\/.*|picasaweb\.google\.com.*\/.*\/.*#.*|picasaweb\.google\.com.*\/lh\/photo\/.*|picasaweb\.google\.com.*\/.*\/.*|dailybooth\.com\/.*\/.*|brizzly\.com\/pic\/.*|pics\.brizzly\.com\/.*\.jpg|img\.ly\/.*|www\.tinypic\.com\/view\.php.*|tinypic\.com\/view\.php.*|www\.tinypic\.com\/player\.php.*|tinypic\.com\/player\.php.*|www\.tinypic\.com\/r\/.*\/.*|tinypic\.com\/r\/.*\/.*|.*\.tinypic\.com\/.*\.jpg|.*\.tinypic\.com\/.*\.png|meadd\.com\/.*\/.*|meadd\.com\/.*|.*\.deviantart\.com\/art\/.*|.*\.deviantart\.com\/gallery\/.*|.*\.deviantart\.com\/#\/.*|fav\.me\/.*|.*\.deviantart\.com|.*\.deviantart\.com\/gallery|.*\.deviantart\.com\/.*\/.*\.jpg|.*\.deviantart\.com\/.*\/.*\.gif|.*\.deviantart\.net\/.*\/.*\.jpg|.*\.deviantart\.net\/.*\/.*\.gif|plixi\.com\/p\/.*|plixi\.com\/profile\/home\/.*|plixi\.com\/.*|www\.fotopedia\.com\/.*\/.*|fotopedia\.com\/.*\/.*|photozou\.jp\/photo\/show\/.*\/.*|photozou\.jp\/photo\/photo_only\/.*\/.*|instagr\.am\/p\/.*|instagram\.com\/p\/.*|skitch\.com\/.*\/.*\/.*|img\.skitch\.com\/.*|https:\/\/skitch\.com\/.*\/.*\/.*|https:\/\/img\.skitch\.com\/.*|share\.ovi\.com\/media\/.*\/.*|www\.questionablecontent\.net\/|questionablecontent\.net\/|www\.questionablecontent\.net\/view\.php.*|questionablecontent\.net\/view\.php.*|questionablecontent\.net\/comics\/.*\.png|www\.questionablecontent\.net\/comics\/.*\.png|picplz\.com\/user\/.*\/pic\/.*\/|twitrpix\.com\/.*|.*\.twitrpix\.com\/.*|www\.someecards\.com\/.*\/.*|someecards\.com\/.*\/.*|some\.ly\/.*|www\.some\.ly\/.*|pikchur\.com\/.*|achewood\.com\/.*|www\.achewood\.com\/.*|achewood\.com\/index\.php.*|www\.achewood\.com\/index\.php.*|www\.whosay\.com\/content\/.*|www\.whosay\.com\/photos\/.*|www\.whosay\.com\/videos\/.*|say\.ly\/.*|www\.whitehouse\.gov\/photos-and-video\/video\/.*|www\.whitehouse\.gov\/video\/.*|wh\.gov\/photos-and-video\/video\/.*|wh\.gov\/video\/.*|www\.hulu\.com\/watch.*|www\.hulu\.com\/w\/.*|hulu\.com\/watch.*|hulu\.com\/w\/.*|.*crackle\.com\/c\/.*|www\.fancast\.com\/.*\/videos|www\.funnyordie\.com\/videos\/.*|www\.funnyordie\.com\/m\/.*|funnyordie\.com\/videos\/.*|funnyordie\.com\/m\/.*|www\.vimeo\.com\/groups\/.*\/videos\/.*|www\.vimeo\.com\/.*|vimeo\.com\/groups\/.*\/videos\/.*|vimeo\.com\/.*|vimeo\.com\/m\/#\/.*|www\.ted\.com\/talks\/.*\.html.*|www\.ted\.com\/talks\/lang\/.*\/.*\.html.*|www\.ted\.com\/index\.php\/talks\/.*\.html.*|www\.ted\.com\/index\.php\/talks\/lang\/.*\/.*\.html.*|.*nfb\.ca\/film\/.*|www\.thedailyshow\.com\/watch\/.*|www\.thedailyshow\.com\/full-episodes\/.*|www\.thedailyshow\.com\/collection\/.*\/.*\/.*|movies\.yahoo\.com\/movie\/.*\/video\/.*|movies\.yahoo\.com\/movie\/.*\/trailer|movies\.yahoo\.com\/movie\/.*\/video|www\.colbertnation\.com\/the-colbert-report-collections\/.*|www\.colbertnation\.com\/full-episodes\/.*|www\.colbertnation\.com\/the-colbert-report-videos\/.*|www\.comedycentral\.com\/videos\/index\.jhtml\?.*|www\.theonion\.com\/video\/.*|theonion\.com\/video\/.*|wordpress\.tv\/.*\/.*\/.*\/.*\/|www\.traileraddict\.com\/trailer\/.*|www\.traileraddict\.com\/clip\/.*|www\.traileraddict\.com\/poster\/.*|www\.escapistmagazine\.com\/videos\/.*|www\.trailerspy\.com\/trailer\/.*\/.*|www\.trailerspy\.com\/trailer\/.*|www\.trailerspy\.com\/view_video\.php.*|www\.atom\.com\/.*\/.*\/|fora\.tv\/.*\/.*\/.*\/.*|www\.spike\.com\/video\/.*|www\.gametrailers\.com\/video\/.*|gametrailers\.com\/video\/.*|www\.koldcast\.tv\/video\/.*|www\.koldcast\.tv\/#video:.*|techcrunch\.tv\/watch.*|techcrunch\.tv\/.*\/watch.*|mixergy\.com\/.*|video\.pbs\.org\/video\/.*|www\.zapiks\.com\/.*|tv\.digg\.com\/diggnation\/.*|tv\.digg\.com\/diggreel\/.*|tv\.digg\.com\/diggdialogg\/.*|www\.trutv\.com\/video\/.*|www\.nzonscreen\.com\/title\/.*|nzonscreen\.com\/title\/.*|app\.wistia\.com\/embed\/medias\/.*|https:\/\/app\.wistia\.com\/embed\/medias\/.*|hungrynation\.tv\/.*\/episode\/.*|www\.hungrynation\.tv\/.*\/episode\/.*|hungrynation\.tv\/episode\/.*|www\.hungrynation\.tv\/episode\/.*|indymogul\.com\/.*\/episode\/.*|www\.indymogul\.com\/.*\/episode\/.*|indymogul\.com\/episode\/.*|www\.indymogul\.com\/episode\/.*|channelfrederator\.com\/.*\/episode\/.*|www\.channelfrederator\.com\/.*\/episode\/.*|channelfrederator\.com\/episode\/.*|www\.channelfrederator\.com\/episode\/.*|tmiweekly\.com\/.*\/episode\/.*|www\.tmiweekly\.com\/.*\/episode\/.*|tmiweekly\.com\/episode\/.*|www\.tmiweekly\.com\/episode\/.*|99dollarmusicvideos\.com\/.*\/episode\/.*|www\.99dollarmusicvideos\.com\/.*\/episode\/.*|99dollarmusicvideos\.com\/episode\/.*|www\.99dollarmusicvideos\.com\/episode\/.*|ultrakawaii\.com\/.*\/episode\/.*|www\.ultrakawaii\.com\/.*\/episode\/.*|ultrakawaii\.com\/episode\/.*|www\.ultrakawaii\.com\/episode\/.*|barelypolitical\.com\/.*\/episode\/.*|www\.barelypolitical\.com\/.*\/episode\/.*|barelypolitical\.com\/episode\/.*|www\.barelypolitical\.com\/episode\/.*|barelydigital\.com\/.*\/episode\/.*|www\.barelydigital\.com\/.*\/episode\/.*|barelydigital\.com\/episode\/.*|www\.barelydigital\.com\/episode\/.*|threadbanger\.com\/.*\/episode\/.*|www\.threadbanger\.com\/.*\/episode\/.*|threadbanger\.com\/episode\/.*|www\.threadbanger\.com\/episode\/.*|vodcars\.com\/.*\/episode\/.*|www\.vodcars\.com\/.*\/episode\/.*|vodcars\.com\/episode\/.*|www\.vodcars\.com\/episode\/.*|confreaks\.net\/videos\/.*|www\.confreaks\.net\/videos\/.*|video\.allthingsd\.com\/video\/.*|aniboom\.com\/animation-video\/.*|www\.aniboom\.com\/animation-video\/.*|clipshack\.com\/Clip\.aspx\?.*|www\.clipshack\.com\/Clip\.aspx\?.*|grindtv\.com\/.*\/video\/.*|www\.grindtv\.com\/.*\/video\/.*|ifood\.tv\/recipe\/.*|ifood\.tv\/video\/.*|ifood\.tv\/channel\/user\/.*|www\.ifood\.tv\/recipe\/.*|www\.ifood\.tv\/video\/.*|www\.ifood\.tv\/channel\/user\/.*|logotv\.com\/video\/.*|www\.logotv\.com\/video\/.*|lonelyplanet\.com\/Clip\.aspx\?.*|www\.lonelyplanet\.com\/Clip\.aspx\?.*|streetfire\.net\/video\/.*\.htm.*|www\.streetfire\.net\/video\/.*\.htm.*|trooptube\.tv\/videos\/.*|www\.trooptube\.tv\/videos\/.*|www\.godtube\.com\/featured\/video\/.*|godtube\.com\/featured\/video\/.*|www\.godtube\.com\/watch\/.*|godtube\.com\/watch\/.*|www\.tangle\.com\/view_video.*|mediamatters\.org\/mmtv\/.*|www\.clikthrough\.com\/theater\/video\/.*|soundcloud\.com\/.*|soundcloud\.com\/.*\/.*|soundcloud\.com\/.*\/sets\/.*|soundcloud\.com\/groups\/.*|snd\.sc\/.*|www\.last\.fm\/music\/.*|www\.last\.fm\/music\/+videos\/.*|www\.last\.fm\/music\/+images\/.*|www\.last\.fm\/music\/.*\/_\/.*|www\.last\.fm\/music\/.*\/.*|www\.mixcloud\.com\/.*\/.*\/|www\.radionomy\.com\/.*\/radio\/.*|radionomy\.com\/.*\/radio\/.*|www\.entertonement\.com\/clips\/.*|www\.rdio\.com\/#\/artist\/.*\/album\/.*|www\.rdio\.com\/artist\/.*\/album\/.*|www\.zero-inch\.com\/.*|.*\.bandcamp\.com\/|.*\.bandcamp\.com\/track\/.*|.*\.bandcamp\.com\/album\/.*|freemusicarchive\.org\/music\/.*|www\.freemusicarchive\.org\/music\/.*|freemusicarchive\.org\/curator\/.*|www\.freemusicarchive\.org\/curator\/.*|www\.npr\.org\/.*\/.*\/.*\/.*\/.*|www\.npr\.org\/.*\/.*\/.*\/.*\/.*\/.*|www\.npr\.org\/.*\/.*\/.*\/.*\/.*\/.*\/.*|www\.npr\.org\/templates\/story\/story\.php.*|huffduffer\.com\/.*\/.*|www\.audioboo\.fm\/boos\/.*|audioboo\.fm\/boos\/.*|boo\.fm\/b.*|www\.xiami\.com\/song\/.*|xiami\.com\/song\/.*|www\.saynow\.com\/playMsg\.html.*|www\.saynow\.com\/playMsg\.html.*|listen\.grooveshark\.com\/s\/.*|radioreddit\.com\/songs.*|www\.radioreddit\.com\/songs.*|radioreddit\.com\/\?q=songs.*|www\.radioreddit\.com\/\?q=songs.*|espn\.go\.com\/video\/clip.*|espn\.go\.com\/.*\/story.*|abcnews\.com\/.*\/video\/.*|abcnews\.com\/video\/playerIndex.*|washingtonpost\.com\/wp-dyn\/.*\/video\/.*\/.*\/.*\/.*|www\.washingtonpost\.com\/wp-dyn\/.*\/video\/.*\/.*\/.*\/.*|www\.boston\.com\/video.*|boston\.com\/video.*|www\.facebook\.com\/photo\.php.*|www\.facebook\.com\/video\/video\.php.*|www\.facebook\.com\/v\/.*|cnbc\.com\/id\/.*\?.*video.*|www\.cnbc\.com\/id\/.*\?.*video.*|cnbc\.com\/id\/.*\/play\/1\/video\/.*|www\.cnbc\.com\/id\/.*\/play\/1\/video\/.*|cbsnews\.com\/video\/watch\/.*|www\.google\.com\/buzz\/.*\/.*\/.*|www\.google\.com\/buzz\/.*|www\.google\.com\/profiles\/.*|google\.com\/buzz\/.*\/.*\/.*|google\.com\/buzz\/.*|google\.com\/profiles\/.*|www\.cnn\.com\/video\/.*|edition\.cnn\.com\/video\/.*|money\.cnn\.com\/video\/.*|today\.msnbc\.msn\.com\/id\/.*\/vp\/.*|www\.msnbc\.msn\.com\/id\/.*\/vp\/.*|www\.msnbc\.msn\.com\/id\/.*\/ns\/.*|today\.msnbc\.msn\.com\/id\/.*\/ns\/.*|multimedia\.foxsports\.com\/m\/video\/.*\/.*|msn\.foxsports\.com\/video.*|www\.globalpost\.com\/video\/.*|www\.globalpost\.com\/dispatch\/.*|guardian\.co\.uk\/.*\/video\/.*\/.*\/.*\/.*|www\.guardian\.co\.uk\/.*\/video\/.*\/.*\/.*\/.*|bravotv\.com\/.*\/.*\/videos\/.*|www\.bravotv\.com\/.*\/.*\/videos\/.*|video\.nationalgeographic\.com\/.*\/.*\/.*\.html|dsc\.discovery\.com\/videos\/.*|animal\.discovery\.com\/videos\/.*|health\.discovery\.com\/videos\/.*|investigation\.discovery\.com\/videos\/.*|military\.discovery\.com\/videos\/.*|planetgreen\.discovery\.com\/videos\/.*|science\.discovery\.com\/videos\/.*|tlc\.discovery\.com\/videos\/.*|.*amazon\..*\/gp\/product\/.*|.*amazon\..*\/.*\/dp\/.*|.*amazon\..*\/dp\/.*|.*amazon\..*\/o\/ASIN\/.*|.*amazon\..*\/gp\/offer-listing\/.*|.*amazon\..*\/.*\/ASIN\/.*|.*amazon\..*\/gp\/product\/images\/.*|.*amazon\..*\/gp\/aw\/d\/.*|www\.amzn\.com\/.*|amzn\.com\/.*|www\.shopstyle\.com\/browse.*|www\.shopstyle\.com\/action\/apiVisitRetailer.*|api\.shopstyle\.com\/action\/apiVisitRetailer.*|www\.shopstyle\.com\/action\/viewLook.*|gist\.github\.com\/.*|twitter\.com\/.*\/status\/.*|twitter\.com\/.*\/statuses\/.*|www\.twitter\.com\/.*\/status\/.*|www\.twitter\.com\/.*\/statuses\/.*|mobile\.twitter\.com\/.*\/status\/.*|mobile\.twitter\.com\/.*\/statuses\/.*|https:\/\/twitter\.com\/.*\/status\/.*|https:\/\/twitter\.com\/.*\/statuses\/.*|https:\/\/www\.twitter\.com\/.*\/status\/.*|https:\/\/www\.twitter\.com\/.*\/statuses\/.*|https:\/\/mobile\.twitter\.com\/.*\/status\/.*|https:\/\/mobile\.twitter\.com\/.*\/statuses\/.*|www\.crunchbase\.com\/.*\/.*|crunchbase\.com\/.*\/.*|www\.slideshare\.net\/.*\/.*|www\.slideshare\.net\/mobile\/.*\/.*|slidesha\.re\/.*|scribd\.com\/doc\/.*|www\.scribd\.com\/doc\/.*|scribd\.com\/mobile\/documents\/.*|www\.scribd\.com\/mobile\/documents\/.*|screenr\.com\/.*|polldaddy\.com\/community\/poll\/.*|polldaddy\.com\/poll\/.*|answers\.polldaddy\.com\/poll\/.*|www\.5min\.com\/Video\/.*|www\.howcast\.com\/videos\/.*|www\.screencast\.com\/.*\/media\/.*|screencast\.com\/.*\/media\/.*|www\.screencast\.com\/t\/.*|screencast\.com\/t\/.*|issuu\.com\/.*\/docs\/.*|www\.kickstarter\.com\/projects\/.*\/.*|www\.scrapblog\.com\/viewer\/viewer\.aspx.*|ping\.fm\/p\/.*|chart\.ly\/symbols\/.*|chart\.ly\/.*|maps\.google\.com\/maps\?.*|maps\.google\.com\/\?.*|maps\.google\.com\/maps\/ms\?.*|.*\.craigslist\.org\/.*\/.*|my\.opera\.com\/.*\/albums\/show\.dml\?id=.*|my\.opera\.com\/.*\/albums\/showpic\.dml\?album=.*&picture=.*|tumblr\.com\/.*|.*\.tumblr\.com\/post\/.*|www\.polleverywhere\.com\/polls\/.*|www\.polleverywhere\.com\/multiple_choice_polls\/.*|www\.polleverywhere\.com\/free_text_polls\/.*|www\.quantcast\.com\/wd:.*|www\.quantcast\.com\/.*|siteanalytics\.compete\.com\/.*|statsheet\.com\/statplot\/charts\/.*\/.*\/.*\/.*|statsheet\.com\/statplot\/charts\/e\/.*|statsheet\.com\/.*\/teams\/.*\/.*|statsheet\.com\/tools\/chartlets\?chart=.*|.*\.status\.net\/notice\/.*|identi\.ca\/notice\/.*|brainbird\.net\/notice\/.*|shitmydadsays\.com\/notice\/.*|www\.studivz\.net\/Profile\/.*|www\.studivz\.net\/l\/.*|www\.studivz\.net\/Groups\/Overview\/.*|www\.studivz\.net\/Gadgets\/Info\/.*|www\.studivz\.net\/Gadgets\/Install\/.*|www\.studivz\.net\/.*|www\.meinvz\.net\/Profile\/.*|www\.meinvz\.net\/l\/.*|www\.meinvz\.net\/Groups\/Overview\/.*|www\.meinvz\.net\/Gadgets\/Info\/.*|www\.meinvz\.net\/Gadgets\/Install\/.*|www\.meinvz\.net\/.*|www\.schuelervz\.net\/Profile\/.*|www\.schuelervz\.net\/l\/.*|www\.schuelervz\.net\/Groups\/Overview\/.*|www\.schuelervz\.net\/Gadgets\/Info\/.*|www\.schuelervz\.net\/Gadgets\/Install\/.*|www\.schuelervz\.net\/.*|myloc\.me\/.*|pastebin\.com\/.*|pastie\.org\/.*|www\.pastie\.org\/.*|redux\.com\/stream\/item\/.*\/.*|redux\.com\/f\/.*\/.*|www\.redux\.com\/stream\/item\/.*\/.*|www\.redux\.com\/f\/.*\/.*|cl\.ly\/.*|cl\.ly\/.*\/content|speakerdeck\.com\/u\/.*\/p\/.*|www\.kiva\.org\/lend\/.*|www\.timetoast\.com\/timelines\/.*|storify\.com\/.*\/.*|.*meetup\.com\/.*|meetu\.ps\/.*|www\.dailymile\.com\/people\/.*\/entries\/.*|.*\.kinomap\.com\/.*|www\.metacdn\.com\/api\/users\/.*\/content\/.*|www\.metacdn\.com\/api\/users\/.*\/media\/.*|prezi\.com\/.*\/.*|.*\.uservoice\.com\/.*\/suggestions\/.*|formspring\.me\/.*|www\.formspring\.me\/.*|formspring\.me\/.*\/q\/.*|www\.formspring\.me\/.*\/q\/.*|twitlonger\.com\/show\/.*|www\.twitlonger\.com\/show\/.*|tl\.gd\/.*|www\.qwiki\.com\/q\/.*|crocodoc\.com\/.*|.*\.crocodoc\.com\/.*|https:\/\/crocodoc\.com\/.*|https:\/\/.*\.crocodoc\.com\/.*)/i;
-				var ret = nm._hasFilter('link') && nm.opener.attr('href') && nm.opener.attr('href').match(embedlyReg) !== null;
-				if (ret)
-					nm._delFilter('iframe');
-				return ret;
+				if (nm._hasFilter('link') && nm._hasFilter('iframe') && nm.opener.attr('href') && nm.embedly.key) {
+					if (cache[nm.opener.attr('href')]) {
+						nm.store.embedly = cache[nm.opener.attr('href')];
+						nm._delFilter('iframe');
+						return true;
+					}
+					nm.store.embedly = false;
+					var data = nm.embedly;
+					data.url = nm.opener.attr('href');
+					$.ajax({
+						url: nm.embedlyUrl,
+						dataType: 'jsonp',
+						data: data,
+						success: function(data) {
+							if (data.type != 'error' && data.html) {
+								nm.store.embedly = data;
+								cache[nm.opener.attr('href')] = data;
+								nm._delFilter('iframe');
+								nm.filters.push('embedly');
+								nm._callFilters('initFilters');
+								nm._callFilters('init');
+							}
+						}
+					});
+				}
+				return false;
 			},
 			init: function(nm) {
 				nm.loadFilter = 'embedly';
-				nm.store.embedly = {};
 			},
 			load: function(nm) {
-				$.ajax({
-					url: 'http://api.embed.ly/1/oembed',
-					dataType: 'jsonp',
-					data: 'wmode=transparent&url='+nm.opener.attr('href'),
-					success: function(data) {
-						if (data.type == 'error')
+				if (nm.store.embedly.type == 'photo') {
+					nm.filters.push('image');
+					$('<img />')
+						.load(function() {
+							nm.elts.cont.addClass('nyroModalImg');
+							nm.elts.hidden.addClass('nyroModalImg');
+							nm._setCont(this);
+						}).on('error', function() {
 							nm._error();
-						else if (data.type == 'photo') {
-							nm.filters.push('image');
-							$('<img />')
-								.load(function() {
-									nm.elts.cont.addClass('nyroModalImg');
-									nm.elts.hidden.addClass('nyroModalImg');
-									nm._setCont(this);
-								}).error(function() {
-									nm._error();
-								})
-								.attr('src', data.url);
-						} else {
-							nm.store.embedly.w = data.width;
-							nm.store.embedly.h = data.height;
-							nm._setCont('<div>'+data.html+'</div>');
-						}
-					}
-				});
+						})
+						.attr('src', nm.store.embedly.url);
+				} else {
+					nm._setCont('<div>'+nm.store.embedly.html+'</div>');
+				}
 			},
 			size: function(nm) {
-				if (nm.store.embedly.w && !nm.sizes.h) {
-					nm.sizes.w = nm.store.embedly.w;
-					nm.sizes.h = nm.store.embedly.h;
+				if (nm.store.embedly.width && !nm.sizes.height) {
+					nm.sizes.w = nm.store.embedly.width;
+					nm.sizes.h = nm.store.embedly.height;
+				}
+			}
+		}
+	});
+});
+/*
+ * nyroModal v2.0.0
+ * 
+ * Youtube filter
+ * 
+ * Depends:
+ * - filters.link
+ * 
+ * Before: filters.embedly
+ */
+jQuery(function($, undefined) {
+	$.nmFilters({
+		youtube: {
+			is: function(nm) {
+				if (nm._hasFilter('link') && nm._hasFilter('iframe') && nm.opener.attr('href').indexOf('www.youtube.com/watch?v=') > -1) {
+					nm._delFilter('iframe');
+					return true;
+				}
+				return false;
+			},
+			init: function(nm) {
+				nm.loadFilter = 'youtube';
+			},
+			load: function(nm) {
+				nm.store.youtubeIframe = $('<iframe />')
+					.attr({
+						src: 'javascript:\'\';',
+						id: 'nyromodal-iframe-'+(new Date().getTime()),
+						frameborder: '0'
+					});
+				nm._setCont(nm.store.youtubeIframe);
+			},
+			afterShowCont: function(nm) {
+				nm.store.youtubeIframe.attr('src', nm.opener.attr('href').replace(/watch\?v=/i, 'embed/'));
+			},
+			close: function(nm) {
+				if (nm.store.youtubeIframe) {
+					nm.store.youtubeIframe.remove();
+					nm.store.youtubeIframe = undefined;
+					delete(nm.store.youtubeIframe);
 				}
 			}
 		}

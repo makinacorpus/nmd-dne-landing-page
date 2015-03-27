@@ -1,123 +1,105 @@
-
-.nyroModalBg{
-	background:black;
-	position:absolute;
-	top:0px;
-	left:0px;
-	width:100%;
-	height:500%;
-	z-index:3000;
+.nyroModalBg {
+	position: fixed;
+	overflow: hidden;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: #000;
+	opacity: 0.7;
 }
-
-div#nyroModalFull {
-	font-size: 12px;
-	color: #777;
-}
-div#nyroModalLoading {
-	border: 4px solid #FFF;
-	width: 150px;
-	height: 150px;
-	text-indent: -9999em;
-	background: #fff url(../images/landing/ajaxLoader.gif) no-repeat;
-	background-position: center;
-}
-div#nyroModalLoading.error {
-	border: 4px solid #f66;
-	line-height: 20px;
-	padding: 20px;
-	width: 300px;
-	height: 100px;
-	text-indent: 0;
-	background: #fff;
-}
-div#nyroModalWrapper {
-	background: #fff;
-	border: 4px solid #FFF;
-}
-a#closeBut,
-a.nyroModalClose {
+.nmReposition {
 	position: absolute;
-	display: block;
+}
+.nyroModalCloseButton {
 	top: -13px;
 	right: -13px;
-	width: 30px;
-	height: 30px;
+	width: 12px;
+	height: 12px;
 	text-indent: -9999em;
-	background: url(../images/landing/close.png) no-repeat;
-	outline: 0;
-	z-index:10000;
+	background: url(../img/close.gif);
 }
-h1#nyroModalTitle {
+.nyroModalTitle {
+	top: -26px;
+	left: 0;
 	margin: 0;
-	padding: 0;
-	position: absolute;
-	bottom: -22px;
-	left: 5px;
-	font-size: 12px;
+    font-size: 1.1em;
 	color: #ddd;
-	font-family:Arial;
 }
-div#nyroModalContent {
-	overflow: auto;
+.nyroModalCont {
+	position: absolute;
+	border: 4px solid #777;
+	margin: 25px;
+	background: #fff;
 }
-.nyroModalCont{z-index:4000;}
-div.wrapper div#nyroModalContent {
-	padding: 5px;
+.nyroModalCont iframe {
+	width: 600px;
+	height: 400px;
 }
-div.wrapperImg div#nyroModalContent {
+.nyroModalError {
+	border: 4px solid red;
+	color: red;
+	width: 250px;
+	height: 250px;
+}
+.nyroModalError div {
+	min-width: 0;
+	min-height: 0;
+	padding: 10px;
+}
+.nyroModalLink, .nyroModalDom, .nyroModalForm, .nyroModalFormFile {
+	position: relative;
+	padding: 10px;
+	min-height: 250px;
+	min-width: 250px;
+	max-width: 1000px;
+}
+.nyroModalImage, .nyroModalSwf, .nyroModalIframe, .nyroModalIframeForm {
 	position: relative;
 	overflow: hidden;
-	text-align: center;
 }
-div.wrapperImg img {
-	vertical-align: baseline;
+.nyroModalImage img {
+    vertical-align: top;
 }
-div.wrapperImg div#nyroModalContent div {
+.nyroModalHidden {
+	left: -9999em;
+	top: -9999em;
+}
+.nyroModalLoad {
 	position: absolute;
-	bottom: 0;
-	left: 0;
-	background: black;
-	padding: 10px;
-	margin: 10px;
-	border: 1px white dotted;
-	overflow: hidden;
-	opacity: 0.2;
-	filter: alpha(opacity=20);
+	width: 100px;
+	height: 100px;
+	background: #fff url(../img/ajaxLoader.gif) no-repeat center;
+	padding: 0;
 }
-div.wrapperImg div#nyroModalContent div:hover {
-	opacity: 0.5;
-	filter: alpha(opacity=50);
-	cursor: help;
-}
-a.nyroModalPrev, a.nyroModalNext {
-	z-index: 105;
+.nyroModalPrev, .nyroModalNext {
 	outline: none;
 	position: absolute;
 	top: 0;
-	height: 100%;
-	width: 40%;
+	height: 60%;
+	width: 150px;
+	min-height: 50px;
+	max-height: 300px;
 	cursor: pointer;
 	text-indent: -9999em;
-	background: left 20% no-repeat;
-	background-image: url(data:image/gif;base64,AAAA); /* Trick IE6 */
+	background: transparent url('data:image/gif;base64,AAAA') left 20% no-repeat;
 }
-div.wrapperSwf a.nyroModalPrev, div.wrapperSwf a.nyroModalNext, div.wrapper a.nyroModalPrev, div.wrapper a.nyroModalNext {
-	height: 60%;
-	width: 20%;
+.nyroModalImage .nyroModalPrev, .nyroModalImage .nyroModalNext {
+	height: 100%;
+	width: 40%;
+	max-height: none;
 }
-a.nyroModalPrev {
+.nyroModalPrev {
 	left: 0;
-	background-position: left 50%;
 }
-a.nyroModalPrev:hover {
-	background-image: url(../images/landing/prev.png);
+.nyroModalPrev:hover {
+	background-image: url(../img/prev.gif);
 }
-a.nyroModalNext {
+.nyroModalNext {
 	right: 0;
-	background-position: right 50%;
+	background-position: right 20%;
 }
-a.nyroModalNext:hover {
-	background-image: url(../images/landing/next.png);
+.nyroModalNext:hover {
+	background-position: right 20%;
+	background-image: url(../img/next.gif);
 }
-
-.nyroModalTitle {display:none;}
