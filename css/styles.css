@@ -81,3 +81,16 @@ img {
 .motif {
     background: url("../images/landing/bg-motif.gif") repeat scroll left top #FFFFFF;
 }
+
+
+/* ----------- */
+/* Modal */
+/* ----------- */
+
+.nyroModalBg {
+    z-index: 1000;
+}
+
+.nyroModalCont {
+    z-index: 1001;
+}
