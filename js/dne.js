@@ -118,7 +118,7 @@ angular.module('dne.controllers').controller('DNEController',
             var getOffreIndex = function(offre){
                 if (offre.type === 'projects'){
                     return 1 + parseInt(offre.source.mapLabel, 10);
-                }else if (offre.type === 'drawnFeatures'){
+                } else if (offre.type === 'drawnFeatures'){
                     return 1+ offre.source.properties.indexOffre;
                 }
             };
