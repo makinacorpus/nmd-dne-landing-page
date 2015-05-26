@@ -36,6 +36,12 @@
 	width:100%;
 	text-transform:uppercase;
 }
+
+#bloc_contact > img {
+    width: 120px;
+    height: 120px;
+}
+
 #bloc_contact address {
     clear: both;
     color: #ffffff;
